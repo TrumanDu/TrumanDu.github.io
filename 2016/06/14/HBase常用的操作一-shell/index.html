@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建起大规模结构化存储集群。HBase访问接口如下:  Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据 HBase Shell，HBase的命令行工具，最简单的接口，适合">
+<meta name="keywords" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HBase常用的操作一(shell)">
+<meta property="og:url" content="http://trumandu.github.io/2016/06/14/HBase常用的操作一-shell/index.html">
+<meta property="og:site_name" content="Truman&#39;s Blog">
+<meta property="og:description" content="HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建起大规模结构化存储集群。HBase访问接口如下:  Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据 HBase Shell，HBase的命令行工具，最简单的接口，适合">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2016-06-14T12:29:35.700Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HBase常用的操作一(shell)">
+<meta name="twitter:description" content="HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建起大规模结构化存储集群。HBase访问接口如下:  Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据 HBase Shell，HBase的命令行工具，最简单的接口，适合">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://trumandu.github.io/2016/06/14/HBase常用的操作一-shell/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HBase常用的操作一(shell) | Truman's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?baidu_analytics_token";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Truman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/trumandu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://trumandu.github.io/2016/06/14/HBase常用的操作一-shell/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Truman"/>
+      <meta itemprop="description" content="代码改变世界，程序设计人生"/>
+      <meta itemprop="image" content="http://blogstatic.aibibang.com/logo.JPG"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truman's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HBase常用的操作一(shell)
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-14 20:27:16 / 修改时间：20:29:35" itemprop="dateCreated datePublished" datetime="2016-06-14T20:27:16+08:00">2016-06-14</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/hbase/" itemprop="url" rel="index"><span itemprop="name">hbase</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2016/06/14/HBase常用的操作一-shell/" class="leancloud_visitors" data-flag-title="HBase常用的操作一(shell)">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>HBase – Hadoop Database，是一个高可靠性、高性能、面向列、可伸缩的分布式存储系统，利用HBase技术可在廉价PC Server上搭建起大规模结构化存储集群。<br>HBase访问接口如下:</p>
+<ol>
+<li>Native Java API，最常规和高效的访问方式，适合Hadoop MapReduce Job并行批处理HBase表数据</li>
+<li>HBase Shell，HBase的命令行工具，最简单的接口，适合HBase管理使用</li>
+<li>Thrift Gateway，利用Thrift序列化技术，支持C++，PHP，Python等多种语言，适合其他异构系统在线访问HBase表数据</li>
+<li>REST Gateway，支持REST 风格的Http API访问HBase, 解除了语言限制</li>
+<li>Pig，可以使用Pig Latin流式编程语言来操作HBase中的数据，和Hive类似，本质最终也是编译成MapReduce Job来处理HBase表数据，适合做数据统计</li>
+<li>Hive，当前Hive的Release版本尚没有加入对HBase的支持，在Hive 0.7.0中支持HBase，可以使用类似SQL语言来访问HBase<br>本文针对HBase Shell，做一个详细讲解。</li>
+</ol>
+<a id="more"></a>
+<p>在hbase安装目录下执行 bin/hbase shell 即可进入shell操作</p>
+<h4 id="1-一般命令"><a href="#1-一般命令" class="headerlink" title="1. 一般命令"></a>1. 一般命令</h4><h5 id="1-1status"><a href="#1-1status" class="headerlink" title="1.1status"></a>1.1status</h5><p>功能：查询服务器状态<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):003:0&gt; status</span><br><span class="line">4 servers, 0 dead, 1.2500 average load</span><br></pre></td></tr></table></figure></p>
+<h5 id="1-2version"><a href="#1-2version" class="headerlink" title="1.2version"></a>1.2version</h5><p>功能：查询HBase版本信息<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):004:0&gt; version</span><br><span class="line">1.0.0-cdh5.4.0, rUnknown, Tue Apr 21 12:19:34 PDT 2015</span><br></pre></td></tr></table></figure></p>
+<h5 id="1-3-whoami"><a href="#1-3-whoami" class="headerlink" title="1.3 whoami"></a>1.3 whoami</h5><p>功能：查看连接的用户</p>
+<h4 id="2-DDL命令"><a href="#2-DDL命令" class="headerlink" title="2. DDL命令"></a>2. DDL命令</h4><h5 id="2-1-Create创建表"><a href="#2-1-Create创建表" class="headerlink" title="2.1 Create创建表"></a>2.1 Create创建表</h5><p>功能：创建一个表。创建一个表时，不指定具体的列名，但要指定列族名。<br>使用：create ‘表名’,’列族名1’,’列族名2’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):005:0&gt; create &apos;truman_test&apos;,&apos;user&apos;</span><br><span class="line">0 row(s) in 1.3680 seconds</span><br><span class="line"></span><br><span class="line">=&gt; Hbase::Table - truman_test</span><br></pre></td></tr></table></figure></p>
+<p> 备注：<br>新建不带namespace表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create &apos;testTable&apos;,&apos;t1&apos;,&apos;t2&apos;</span><br></pre></td></tr></table></figure></p>
+<p>新建带namespace表</p>
+<ul>
+<li><p>首先建一个namespace</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_namespace &apos;truman&apos;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其次再新建表</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create_namespace &apos;truman：test&apos;,&apos;t1&apos;,&apos;t2&apos;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>备注：t1,t2为column family<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create&apos;reason:user_test&apos;,&apos;bs&apos;,&#123;NUMREGIONS=&gt;2,SPLITALGO=&gt;&apos;HexStringSplit&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="2-2-disable失效表"><a href="#2-2-disable失效表" class="headerlink" title="2.2 disable失效表"></a>2.2 disable失效表</h5><p>功能：失效一个表。当需要修改表结构、删除表时，需要先执行此命令。<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):007:0&gt; disable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 1.2660 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):008:0&gt; describe &apos;truman_test&apos;</span><br><span class="line">Table truman_test is DISABLED</span><br><span class="line">truman_test</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; &apos;user&apos;, BLOOMFILTER =&gt; &apos;ROW&apos;, VERSIONS =&gt; &apos;1&apos;, IN_MEMORY =&gt; &apos;false&apos;, KEEP_DELETED_CELLS =&gt; &apos;</span><br><span class="line">FALSE&apos;, DATA_BLOCK_ENCODING =&gt; &apos;NONE&apos;, TTL =&gt; &apos;FOREVER&apos;, COMPRESSION =&gt; &apos;NONE&apos;, MIN_VERSIONS =&gt; &apos;0&apos;,</span><br><span class="line">BLOCKCACHE =&gt; &apos;true&apos;, BLOCKSIZE =&gt; &apos;65536&apos;, REPLICATION_SCOPE =&gt; &apos;0&apos;&#125;</span><br><span class="line">1 row(s) in 0.0210 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="2-3-enable使失效表有效"><a href="#2-3-enable使失效表有效" class="headerlink" title="2.3 enable使失效表有效"></a>2.3 enable使失效表有效</h5><p>功能：使表有效。在失效表以后，需要执行此命令，以使得表可用。<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):009:0&gt; enable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 0.4320 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):010:0&gt; describe &apos;truman_test&apos;</span><br><span class="line">Table truman_test is ENABLED</span><br><span class="line">truman_test</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; &apos;user&apos;, BLOOMFILTER =&gt; &apos;ROW&apos;, VERSIONS =&gt; &apos;1&apos;, IN_MEMORY =&gt; &apos;false&apos;, KEEP_DELETED_CELLS =&gt; &apos;</span><br><span class="line">FALSE&apos;, DATA_BLOCK_ENCODING =&gt; &apos;NONE&apos;, TTL =&gt; &apos;FOREVER&apos;, COMPRESSION =&gt; &apos;NONE&apos;, MIN_VERSIONS =&gt; &apos;0&apos;,</span><br><span class="line">BLOCKCACHE =&gt; &apos;true&apos;, BLOCKSIZE =&gt; &apos;65536&apos;, REPLICATION_SCOPE =&gt; &apos;0&apos;&#125;</span><br><span class="line">1 row(s) in 0.0260 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="2-4-alter修改表结构"><a href="#2-4-alter修改表结构" class="headerlink" title="2.4 alter修改表结构"></a>2.4 alter修改表结构</h5><p>功能：修改表结构，包括新增列族、删除列族等<br>使用：<br>新增列族（记得在执行alter之前，要先disable表）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):011:0&gt; disable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 1.2480 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):012:0&gt; alter &apos;truman_test&apos;, &apos;order&apos;</span><br><span class="line">Updating all regions with the new schema...</span><br><span class="line">1/1 regions updated.</span><br><span class="line">Done.</span><br><span class="line">0 row(s) in 1.2320 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):013:0&gt; enable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 0.4060 seconds</span><br><span class="line">hbase(main):014:0&gt; describe &apos;truman_test&apos;</span><br><span class="line">Table truman_test is ENABLED</span><br><span class="line">truman_test</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; &apos;order&apos;, BLOOMFILTER =&gt; &apos;ROW&apos;, VERSIONS =&gt; &apos;1&apos;, IN_MEMORY =&gt; &apos;false&apos;, KEEP_DELETED_CELLS =&gt;</span><br><span class="line">&apos;FALSE&apos;, DATA_BLOCK_ENCODING =&gt; &apos;NONE&apos;, TTL =&gt; &apos;FOREVER&apos;, COMPRESSION =&gt; &apos;NONE&apos;, MIN_VERSIONS =&gt; &apos;0&apos;,</span><br><span class="line"> BLOCKCACHE =&gt; &apos;true&apos;, BLOCKSIZE =&gt; &apos;65536&apos;, REPLICATION_SCOPE =&gt; &apos;0&apos;&#125;</span><br><span class="line">&#123;NAME =&gt; &apos;user&apos;, BLOOMFILTER =&gt; &apos;ROW&apos;, VERSIONS =&gt; &apos;1&apos;, IN_MEMORY =&gt; &apos;false&apos;, KEEP_DELETED_CELLS =&gt; &apos;</span><br><span class="line">FALSE&apos;, DATA_BLOCK_ENCODING =&gt; &apos;NONE&apos;, TTL =&gt; &apos;FOREVER&apos;, COMPRESSION =&gt; &apos;NONE&apos;, MIN_VERSIONS =&gt; &apos;0&apos;,</span><br><span class="line">BLOCKCACHE =&gt; &apos;true&apos;, BLOCKSIZE =&gt; &apos;65536&apos;, REPLICATION_SCOPE =&gt; &apos;0&apos;&#125;</span><br><span class="line">2 row(s) in 0.0240 seconds</span><br></pre></td></tr></table></figure></p>
+<p>删除列族<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):015:0&gt; disable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 1.2970 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):017:0&gt; alter &apos;truman_test&apos;,&#123;NAME=&gt;&apos;order&apos;,method=&gt;&apos;delete&apos;&#125;</span><br><span class="line">Unknown argument ignored for column family order:</span><br><span class="line">Updating all regions with the new schema...</span><br><span class="line">1/1 regions updated.</span><br><span class="line">Done.</span><br><span class="line">0 row(s) in 1.2100 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):018:0&gt; enable &apos;truman_test&apos;</span><br><span class="line">0 row(s) in 0.4170 seconds</span><br></pre></td></tr></table></figure></p>
+<p>重命名列族<br>列族不能被重命名。重命名一个列族的通常途径是使用API创建一个有着期望名称的新的列族，然后将数据复制过去，最后再删除旧的列族。</p>
+<h5 id="2-5-describe查看表结构"><a href="#2-5-describe查看表结构" class="headerlink" title="2.5 describe查看表结构"></a>2.5 describe查看表结构</h5><p>功能：查看表结构<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):010:0&gt; describe &apos;truman_test&apos;</span><br><span class="line">Table truman_test is ENABLED</span><br><span class="line">truman_test</span><br><span class="line">COLUMN FAMILIES DESCRIPTION</span><br><span class="line">&#123;NAME =&gt; &apos;user&apos;, BLOOMFILTER =&gt; &apos;ROW&apos;, VERSIONS =&gt; &apos;1&apos;, IN_MEMORY =&gt; &apos;false&apos;, KEEP_DELETED_CELLS =&gt; &apos;</span><br><span class="line">FALSE&apos;, DATA_BLOCK_ENCODING =&gt; &apos;NONE&apos;, TTL =&gt; &apos;FOREVER&apos;, COMPRESSION =&gt; &apos;NONE&apos;, MIN_VERSIONS =&gt; &apos;0&apos;,</span><br><span class="line">BLOCKCACHE =&gt; &apos;true&apos;, BLOCKSIZE =&gt; &apos;65536&apos;, REPLICATION_SCOPE =&gt; &apos;0&apos;&#125;</span><br><span class="line">1 row(s) in 0.0260 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="2-6-list列举数据库中的所有表"><a href="#2-6-list列举数据库中的所有表" class="headerlink" title="2.6 list列举数据库中的所有表"></a>2.6 list列举数据库中的所有表</h5><p>功能：查看数据库中所有的表<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):019:0&gt; list</span><br><span class="line">TABLE</span><br><span class="line">reason</span><br><span class="line">test</span><br><span class="line">truman_test</span><br><span class="line">3 row(s) in 0.0090 seconds</span><br><span class="line"></span><br><span class="line">=&gt; [&quot;reason&quot;, &quot;test&quot;, &quot;truman_test&quot;]</span><br></pre></td></tr></table></figure></p>
+<h5 id="2-7-drop删除表"><a href="#2-7-drop删除表" class="headerlink" title="2.7 drop删除表"></a>2.7 drop删除表</h5><p>功能：删除指定的表<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):022:0&gt; disable &apos;tttt&apos;</span><br><span class="line">0 row(s) in 1.2370 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):023:0&gt; drop &apos;tttt&apos;</span><br><span class="line">0 row(s) in 0.2140 seconds</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-DML命令"><a href="#3-DML命令" class="headerlink" title="3. DML命令"></a>3. DML命令</h4><h5 id="3-1-put插入数据"><a href="#3-1-put插入数据" class="headerlink" title="3.1 put插入数据"></a>3.1 put插入数据</h5><p>功能：插入一条数据到指定的表中。对于同一个rowkey，如果执行两次put，则第二次被认为是更新操作。<br>使用：put ‘表名’,’列族名1:列名1’,’值’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):006:0&gt; put &apos;truman_test&apos;,&apos;row1&apos;,&apos;user:name&apos;,&apos;truman&apos;</span><br><span class="line">0 row(s) in 0.1470 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-2-get获取数据"><a href="#3-2-get获取数据" class="headerlink" title="3.2 get获取数据"></a>3.2 get获取数据</h5><p>功能：获取数据<br>使用：<br>获取指定rowkey的指定列族指定列的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):027:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;,&apos;user:name&apos;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:name                 timestamp=1465268767543, value=truman</span><br><span class="line">1 row(s) in 0.0180 seconds</span><br></pre></td></tr></table></figure></p>
+<p>获取指定rowkey的指定列族所有的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):028:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;,&apos;user&apos;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:age                  timestamp=1465277742287, value=20</span><br><span class="line"> user:name                 timestamp=1465268767543, value=truman</span><br><span class="line">2 row(s) in 0.0150 seconds</span><br></pre></td></tr></table></figure></p>
+<p>获取指定rowkey的所有数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):029:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:age                  timestamp=1465277742287, value=20</span><br><span class="line"> user:name                 timestamp=1465268767543, value=truman</span><br><span class="line">2 row(s) in 0.0270 seconds</span><br></pre></td></tr></table></figure></p>
+<p>获取指定时间戳的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):029:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:age                  timestamp=1465277742287, value=20</span><br><span class="line"> user:name                 timestamp=1465268767543, value=truman</span><br><span class="line">2 row(s) in 0.0270 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):030:0&gt; put &apos;truman_test&apos;,&apos;row1&apos;,&apos;user:age&apos;,&apos;21&apos;</span><br><span class="line">0 row(s) in 0.0090 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):031:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:age                  timestamp=1465277824052, value=21</span><br><span class="line"> user:name                 timestamp=1465268767543, value=truman</span><br><span class="line">2 row(s) in 0.0140 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):034:0&gt; get &apos;truman_test&apos;,&apos;row1&apos;,&#123;COLUMN=&gt;&apos;user:age&apos;,TIMESTAMP=&gt;1465277742287&#125;</span><br><span class="line">COLUMN                     CELL</span><br><span class="line"> user:age                  timestamp=1465277742287, value=20</span><br><span class="line">1 row(s) in 0.0350 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-3-Count计算表的行数"><a href="#3-3-Count计算表的行数" class="headerlink" title="3.3 Count计算表的行数"></a>3.3 Count计算表的行数</h5><p>功能：计算表的行数<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):035:0&gt; count &apos;truman_test&apos;</span><br><span class="line">1 row(s) in 0.0370 seconds</span><br><span class="line"></span><br><span class="line">=&gt; 1</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-4-put更新数据"><a href="#3-4-put更新数据" class="headerlink" title="3.4 put更新数据"></a>3.4 put更新数据</h5><p>详见3.1</p>
+<h5 id="3-5-scan全表扫描数据"><a href="#3-5-scan全表扫描数据" class="headerlink" title="3.5 scan全表扫描数据"></a>3.5 scan全表扫描数据</h5><p>功能：扫描全表所有数据<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):036:0&gt; scan &apos;truman_test&apos;</span><br><span class="line">ROW                        COLUMN+CELL</span><br><span class="line"> row1                      column=user:age, timestamp=1465277824052, value=21</span><br><span class="line"> row1                      column=user:name, timestamp=1465268767543, value=truman</span><br><span class="line">1 row(s) in 0.0310 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-6-delete删除数据"><a href="#3-6-delete删除数据" class="headerlink" title="3.6 delete删除数据"></a>3.6 delete删除数据</h5><p>功能：删除表中的数据<br>使用：<br>删除指定rowkey的指定列族的列名的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):037:0&gt; delete &apos;truman_test&apos;,&apos;row1&apos;,&apos;user:name&apos;</span><br><span class="line">0 row(s) in 0.0610 seconds</span><br></pre></td></tr></table></figure></p>
+<p>删除指定rowkey的指定列族的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; delete &apos;truman_test&apos;,&apos;row1&apos;,&apos;user&apos;</span><br><span class="line">0 row(s) in 0.3730 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-7-deleteall删除整行数据"><a href="#3-7-deleteall删除整行数据" class="headerlink" title="3.7 deleteall删除整行数据"></a>3.7 deleteall删除整行数据</h5><p>功能：删除整行数据<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):003:0&gt; deleteall &apos;truman_test&apos;,&apos;row1&apos;</span><br><span class="line">0 row(s) in 0.0080 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="3-8-truncate删除全表数据"><a href="#3-8-truncate删除全表数据" class="headerlink" title="3.8 truncate删除全表数据"></a>3.8 truncate删除全表数据</h5><p>功能：删除表中所有的数据。正如你看到的，在HBase的help命令里并没有<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> hbase(main):005:0&gt; truncate &apos;truman_test&apos;</span><br><span class="line">Truncating &apos;truman_test&apos; table (it may take a while):</span><br><span class="line"> - Disabling table...</span><br><span class="line"> - Truncating table...</span><br><span class="line">0 row(s) in 1.8220 seconds</span><br></pre></td></tr></table></figure></p>
+<h4 id="4-HBase-Snapshots"><a href="#4-HBase-Snapshots" class="headerlink" title="4. HBase Snapshots"></a>4. HBase Snapshots</h4><h5 id="4-1-新增snapshot"><a href="#4-1-新增snapshot" class="headerlink" title="4.1 新增snapshot"></a>4.1 新增snapshot</h5><p>功能: 为指定表新增一个snapshot<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; snapshot &apos;truman&apos;, &apos;trumanSnapshot-1&apos;</span><br><span class="line">0 row(s) in 1.0820 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-2-删除snapshot"><a href="#4-2-删除snapshot" class="headerlink" title="4.2 删除snapshot"></a>4.2 删除snapshot</h5><p>功能: 删除一个snapshot<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; delete_snapshot &apos;trumanSnapshot-1&apos;</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-4-用snapshot创建一个新表"><a href="#4-4-用snapshot创建一个新表" class="headerlink" title="4.4 用snapshot创建一个新表"></a>4.4 用snapshot创建一个新表</h5><p>功能: Clone a table from snapshot，新表必须不存在。<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):007:0&gt; clone_snapshot &apos;trumanSnapshot-1&apos;,&apos;truman_new&apos;</span><br><span class="line">0 row(s) in 1.0260 seconds</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-3-查看所有的snapshot"><a href="#4-3-查看所有的snapshot" class="headerlink" title="4.3 查看所有的snapshot"></a>4.3 查看所有的snapshot</h5><p>功能:<br>使用：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):001:0&gt; list_snapshots</span><br><span class="line">SNAPSHOT                   TABLE + CREATION TIME</span><br><span class="line"> trumanSnapshot-1          truman (Wed Jun 08 01:43:36 -0400 2016)</span><br><span class="line">1 row(s) in 0.3410 seconds</span><br><span class="line"></span><br><span class="line">=&gt; [&quot;trumanSnapshot-1&quot;]</span><br></pre></td></tr></table></figure></p>
+<h5 id="4-4-根据snapshot恢复数据"><a href="#4-4-根据snapshot恢复数据" class="headerlink" title="4.4 根据snapshot恢复数据"></a>4.4 根据snapshot恢复数据</h5><p>功能: 恢复表数据<br>使用：执行命令之前，首先要确认表的状态是disable,恢复完成之后，表的状态要更改成enable</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hbase(main):008:0&gt; disable &apos;truman&apos;</span><br><span class="line">0 row(s) in 1.3080 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):009:0&gt; restore_snapshot &apos;trumanSnapshot-1&apos;</span><br><span class="line">0 row(s) in 0.8200 seconds</span><br><span class="line"></span><br><span class="line">hbase(main):011:0&gt; enable &apos;truman&apos;</span><br><span class="line">0 row(s) in 0.4530 seconds</span><br></pre></td></tr></table></figure>
+<h4 id="5-参考"><a href="#5-参考" class="headerlink" title="5. 参考"></a>5. 参考</h4><ol>
+<li><a href="https://hbase.apache.org/book.html" target="_blank" rel="noopener">https://hbase.apache.org/book.html</a></li>
+<li><a href="http://coderbase64.iteye.com/blog/2074601" target="_blank" rel="noopener">http://coderbase64.iteye.com/blog/2074601</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>原创不易，支持作者！</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Truman 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Truman</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://trumandu.github.io/2016/06/14/HBase常用的操作一-shell/" title="HBase常用的操作一(shell)">http://trumandu.github.io/2016/06/14/HBase常用的操作一-shell/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+            
+              <div>
+                
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/14/HBase系统架构与存储格式/" rel="next" title="HBase系统架构与存储格式">
+                <i class="fa fa-chevron-left"></i> HBase系统架构与存储格式
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/14/HBase常用的操作二-java-API/" rel="prev" title="HBase常用的操作二(java API)">
+                HBase常用的操作二(java API) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://blogstatic.aibibang.com/logo.JPG"
+                alt="Truman"/>
+            
+              <p class="site-author-name" itemprop="name">Truman</p>
+              <div class="site-description motion-element" itemprop="description">代码改变世界，程序设计人生</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/trumandu" title="GitHub &rarr; https://github.com/trumandu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/u/2549866887?is_all=1" title="Weibo &rarr; http://weibo.com/u/2549866887?is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"/></a>
+             </div>
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.aibibang.com" title="http://www.aibibang.com" rel="noopener" target="_blank">aibibang</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-一般命令"><span class="nav-number">1.</span> <span class="nav-text">1. 一般命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1status"><span class="nav-number">1.1.</span> <span class="nav-text">1.1status</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2version"><span class="nav-number">1.2.</span> <span class="nav-text">1.2version</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-whoami"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 whoami</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-DDL命令"><span class="nav-number">2.</span> <span class="nav-text">2. DDL命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-Create创建表"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Create创建表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-disable失效表"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 disable失效表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-enable使失效表有效"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 enable使失效表有效</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-alter修改表结构"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 alter修改表结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-describe查看表结构"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 describe查看表结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-list列举数据库中的所有表"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 list列举数据库中的所有表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-7-drop删除表"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 drop删除表</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-DML命令"><span class="nav-number">3.</span> <span class="nav-text">3. DML命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-put插入数据"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 put插入数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-get获取数据"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 get获取数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-Count计算表的行数"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Count计算表的行数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-put更新数据"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 put更新数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-5-scan全表扫描数据"><span class="nav-number">3.5.</span> <span class="nav-text">3.5 scan全表扫描数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-6-delete删除数据"><span class="nav-number">3.6.</span> <span class="nav-text">3.6 delete删除数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-7-deleteall删除整行数据"><span class="nav-number">3.7.</span> <span class="nav-text">3.7 deleteall删除整行数据</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-8-truncate删除全表数据"><span class="nav-number">3.8.</span> <span class="nav-text">3.8 truncate删除全表数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-HBase-Snapshots"><span class="nav-number">4.</span> <span class="nav-text">4. HBase Snapshots</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-新增snapshot"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 新增snapshot</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-删除snapshot"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 删除snapshot</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-4-用snapshot创建一个新表"><span class="nav-number">4.3.</span> <span class="nav-text">4.4 用snapshot创建一个新表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-3-查看所有的snapshot"><span class="nav-number">4.4.</span> <span class="nav-text">4.3 查看所有的snapshot</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-4-根据snapshot恢复数据"><span class="nav-number">4.5.</span> <span class="nav-text">4.4 根据snapshot恢复数据</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5. 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Truman</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="https://utteranc.es/client.js"
+        repo="TrumanDu/comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz',
+                'X-LC-Key': 'WjkAtRTpnJdXCPemfmzRWvso',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

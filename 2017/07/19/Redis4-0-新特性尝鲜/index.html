@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Redis4.0 新特性尝鲜1.目录结构 目录 前言 环境搭建 下载 安装 集群搭建   特性尝鲜 注意事项 升级内容 模块系统 PSYNC 2.0 缓存驱逐策略优化 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL 交换数据库 混合RDBAOF持久化格式 内存命令 兼容 NAT 和 Docker   引用  2. 前言2017-07-14 redis 4.0  Stable  versi">
+<meta name="keywords" content="nosql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis4.0 新特性尝鲜">
+<meta property="og:url" content="http://trumandu.github.io/2017/07/19/Redis4-0-新特性尝鲜/index.html">
+<meta property="og:site_name" content="Truman&#39;s Blog">
+<meta property="og:description" content="Redis4.0 新特性尝鲜1.目录结构 目录 前言 环境搭建 下载 安装 集群搭建   特性尝鲜 注意事项 升级内容 模块系统 PSYNC 2.0 缓存驱逐策略优化 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL 交换数据库 混合RDBAOF持久化格式 内存命令 兼容 NAT 和 Docker   引用  2. 前言2017-07-14 redis 4.0  Stable  versi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-08-22T12:31:46.166Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis4.0 新特性尝鲜">
+<meta name="twitter:description" content="Redis4.0 新特性尝鲜1.目录结构 目录 前言 环境搭建 下载 安装 集群搭建   特性尝鲜 注意事项 升级内容 模块系统 PSYNC 2.0 缓存驱逐策略优化 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL 交换数据库 混合RDBAOF持久化格式 内存命令 兼容 NAT 和 Docker   引用  2. 前言2017-07-14 redis 4.0  Stable  versi">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://trumandu.github.io/2017/07/19/Redis4-0-新特性尝鲜/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Redis4.0 新特性尝鲜 | Truman's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?baidu_analytics_token";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Truman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/trumandu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://trumandu.github.io/2017/07/19/Redis4-0-新特性尝鲜/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Truman"/>
+      <meta itemprop="description" content="代码改变世界，程序设计人生"/>
+      <meta itemprop="image" content="http://blogstatic.aibibang.com/logo.JPG"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truman's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Redis4.0 新特性尝鲜
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-07-19 22:17:00" itemprop="dateCreated datePublished" datetime="2017-07-19T22:17:00+08:00">2017-07-19</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-08-22 20:31:46" itemprop="dateModified" datetime="2019-08-22T20:31:46+08:00">2019-08-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2017/07/19/Redis4-0-新特性尝鲜/" class="leancloud_visitors" data-flag-title="Redis4.0 新特性尝鲜">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Redis4-0-新特性尝鲜"><a href="#Redis4-0-新特性尝鲜" class="headerlink" title="Redis4.0 新特性尝鲜"></a>Redis4.0 新特性尝鲜</h1><h2 id="1-目录结构"><a href="#1-目录结构" class="headerlink" title="1.目录结构"></a>1.目录结构</h2><ol>
+<li><a href="#1-目录结构">目录</a></li>
+<li><a href="#2-前言">前言</a></li>
+<li><a href="#3-环境搭建">环境搭建</a><ol>
+<li><a href="#31-下载">下载</a></li>
+<li><a href="#32-编译安装">安装</a></li>
+<li><a href="#33-新建集群">集群搭建</a></li>
+</ol>
+</li>
+<li><a href="#4-特性尝鲜">特性尝鲜</a><ol>
+<li><a href="#41-注意事项">注意事项</a></li>
+<li><a href="#42-升级内容">升级内容</a></li>
+<li><a href="#43-模块系统">模块系统</a></li>
+<li><a href="#44-PSYNC">PSYNC 2.0</a></li>
+<li><a href="#45-缓存驱逐策略优化">缓存驱逐策略优化</a></li>
+<li><a href="#46-">非阻塞 DEL 、 FLUSHDB 和 FLUSHALL</a></li>
+<li><a href="#47-交换数据库">交换数据库</a></li>
+<li><a href="#48-">混合RDBAOF持久化格式</a></li>
+<li><a href="#49-内存命令">内存命令</a></li>
+<li><a href="#410-兼容NAT和Docker">兼容 NAT 和 Docker</a></li>
+</ol>
+</li>
+<li><a href="#5-引用">引用</a></li>
+</ol>
+<h2 id="2-前言"><a href="#2-前言" class="headerlink" title="2. 前言"></a>2. 前言</h2><p><strong>2017-07-14 redis 4.0  Stable  version release</strong>,新增了许多新功能，此次专门抽出时间，探索一些功能，把握Redis未来的发展方向，同时积累经验，为未来升级Redis打下坚实基础。学习新的东西，如果不将它记录下来，过上两周，基本上就忘记做过什么了，对知识的掌握不利，以后尽量所有的学习都能产生文字记录，便于自己总结学习各种技术，也能给新人带去一点便利。</p>
+<h2 id="3-环境搭建"><a href="#3-环境搭建" class="headerlink" title="3. 环境搭建"></a>3. 环境搭建</h2><p>安装方式，较之前没有多大变化，还是写一下，便于新手学习。</p>
+<h3 id="3-1-下载"><a href="#3-1-下载" class="headerlink" title="3.1. 下载"></a>3.1. 下载</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.redis.io/releases/redis-4.0.0.tar.gz</span><br><span class="line">$ tar xzf redis-4.0.0.tar.gz</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-编译安装"><a href="#3-2-编译安装" class="headerlink" title="3.2. 编译安装"></a>3.2. 编译安装</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd redis-4.0.0</span><br><span class="line">$ make</span><br></pre></td></tr></table></figure>
+<p>如果需要将redis-cli,redis-server等相关命令安装到/bin目录下，全局使用的话，可以使用如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ make install</span><br></pre></td></tr></table></figure></p>
+<p>或者利用软连接实现：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ make</span><br><span class="line">$ ln -s  redis-4.0.0/src/redis-server  /bin/redis-server</span><br><span class="line">$ ln -s  redis-4.0.0/src/redis-cli  /bin/redis-cli</span><br></pre></td></tr></table></figure></p>
+<p>在编译中可能会遇到如下问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zmalloc.h:50:31: 错误：jemalloc/jemalloc.h：没有那个文件或目录</span><br></pre></td></tr></table></figure></p>
+<p>出现这个问题是libc 并不是默认的 分配器， 默认的是 jemalloc, 因为 jemalloc 被证明 有更少的 fragmentation problems 比libc，关于更详细信息可以查看redis中REAME,md，其中有详细介绍，此处不再细说。</p>
+<p>解决办法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make MALLOC=libc</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-3-新建集群"><a href="#3-3-新建集群" class="headerlink" title="3.3. 新建集群"></a>3.3. 新建集群</h3><p>按照官方指导，搭建3m+3s集群，端口号7000-7005</p>
+<p>以下为创建脚本：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"> nodes=(7000 7001 7002 7003 7004 7005)</span><br><span class="line"> HOME_DIR=`pwd`</span><br><span class="line">function create()&#123;</span><br><span class="line"> echo &quot;create&quot;</span><br><span class="line"> if [ -d redis_cluster ];then</span><br><span class="line"> rm -rf  redis_cluster</span><br><span class="line"> fi</span><br><span class="line"></span><br><span class="line"> mkdir  redis_cluster</span><br><span class="line"> cd redis_cluster</span><br><span class="line"></span><br><span class="line"> mkdir `echo $&#123;nodes[*]&#125;`</span><br><span class="line"></span><br><span class="line"> for var in $&#123;nodes[*]&#125;</span><br><span class="line"> do</span><br><span class="line">  cd $var</span><br><span class="line">  touch $var-redis.conf</span><br><span class="line">  echo &quot;port&quot; $var &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;cluster-enabled yes&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;cluster-config-file nodes.conf&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;cluster-node-timeout 5000&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;appendonly yes&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;daemonize yes&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  echo &quot;pidfile redis.pid&quot; &gt;&gt; $var-redis.conf</span><br><span class="line">  cd ../</span><br><span class="line"> done</span><br><span class="line"> run;</span><br><span class="line"> src/redis-trib.rb create --replicas 1 127.0.0.1:7000 127.0.0.1:7001 127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function run()&#123;</span><br><span class="line">echo run</span><br><span class="line"> for var in $&#123;nodes[*]&#125;</span><br><span class="line"> do</span><br><span class="line">   cd $HOME_DIR/redis_cluster/$var/</span><br><span class="line">   redis-server $var-redis.conf</span><br><span class="line">   cd $HOME_DIR/</span><br><span class="line">   echo Start redis ports $&#123;var&#125; finish.</span><br><span class="line"> done</span><br><span class="line">&#125;</span><br><span class="line">function stop()&#123;</span><br><span class="line"> cd $HOME_DIR/redis_cluster/</span><br><span class="line"> DIRS=`ls -l | grep &quot;^d&quot; | awk &apos;&#123;print $NF&#125;&apos;`</span><br><span class="line">  for d in $DIRS</span><br><span class="line">  do</span><br><span class="line">    PID=`cat $d/redis.pid`</span><br><span class="line">    if [ -n &quot;$PID&quot; ];then</span><br><span class="line">       kill -9 $PID</span><br><span class="line">       rm -f $d/redis.pid</span><br><span class="line">    fi</span><br><span class="line">  done</span><br><span class="line">  cd  $HOME_DIR/</span><br><span class="line">  echo Stop redis ports $&#123;DIRS&#125; finish.</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">case $1 in</span><br><span class="line">     create)</span><br><span class="line">      echo &quot; create redis cluster 锛?000,7001,7002,7003,7004.7005,7006,7007&quot;</span><br><span class="line">      create</span><br><span class="line">      ;;</span><br><span class="line">     run)</span><br><span class="line">      run</span><br><span class="line">      ;;</span><br><span class="line">     stop)</span><br><span class="line">      stop</span><br><span class="line">     ;;</span><br><span class="line">     *)</span><br><span class="line">      echo &quot;Usage:[create|run|stop]&quot;</span><br><span class="line">      ;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure>
+<p>执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sh createCluster.sh create</span><br></pre></td></tr></table></figure>
+<p>一路回车即可，注意构建集群需要使用redis-trib.rb，需要额外执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem install redis</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[bigdata@trumanlab1 redis-4.0.0]$ redis-cli -c -h 127.0.0.1  -p 7000</span><br><span class="line">127.0.0.1:7000&gt; cluster nodes</span><br><span class="line">63e698210378f4fda23c4070bea3b46f93952811 127.0.0.1:7000@17000 myself,master - 0 1500391716000 1 connected 0-5460</span><br><span class="line">4091630217b64ece9a6fa55c26687a10c1f9a8b5 127.0.0.1:7001@17001 master - 0 1500391717501 2 connected 5461-10922</span><br><span class="line">0b23853c3aa4f5b942a6239bc7bca71df36e121c 127.0.0.1:7005@17005 slave 12d05fb7c20bf001759f80cf3f65ad9df4b01af5 0 1500391716498 6 connected</span><br><span class="line">12d05fb7c20bf001759f80cf3f65ad9df4b01af5 127.0.0.1:7002@17002 master - 0 1500391717000 3 connected 10923-16383</span><br><span class="line">2e559b462362a9563f98b398af3984c05e25ef19 127.0.0.1:7003@17003 slave 63e698210378f4fda23c4070bea3b46f93952811 0 1500391716000 4 connected</span><br><span class="line">c4f8e0a95579c772c7506c195b3c7984c73312b4 127.0.0.1:7004@17004 slave 4091630217b64ece9a6fa55c26687a10c1f9a8b5 0 1500391716000 5 connected</span><br><span class="line">127.0.0.1:7000&gt; set a a</span><br><span class="line">-&gt; Redirected to slot [15495] located at 127.0.0.1:7002</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:7002&gt; get a</span><br><span class="line">&quot;a&quot;</span><br><span class="line">127.0.0.1:7002&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-特性尝鲜"><a href="#4-特性尝鲜" class="headerlink" title="4. 特性尝鲜"></a>4. 特性尝鲜</h2><h3 id="4-1-注意事项"><a href="#4-1-注意事项" class="headerlink" title="4.1 注意事项"></a>4.1 注意事项</h3><blockquote>
+<p>IMPORTANT: Redis Cluster users, please note that, as specified in the list<br>of incompatibilities, Redis 4.0 cluster bus protocol is not compatible with<br>Redis 3.2, so in order to upgrade, a mass reboot of the instances is needed<br>and rolling upgrades are not possible. This change was needed in order to<br>add compatibility for Containers/NAT, where the bus port at a fixed offset<br>was not an acceptable design, so we had to change many things, resulting<br>in the incompatible protocol.</p>
+</blockquote>
+<p>4.0版本与3.2版本传输协议不兼容，更改该协议的目的是为了实现Containers/NAT<br>为了升级，需要重启大量节点，无法做到滚动升级。</p>
+<h3 id="4-2-升级内容"><a href="#4-2-升级内容" class="headerlink" title="4.2 升级内容"></a>4.2 升级内容</h3><blockquote>
+<ul>
+<li>Different replication fixes to PSYNC2, the new 4.0 replication engine.</li>
+<li>Modules thread safe contexts were introduced. They are an &gt;experimental API right now, but the API is considered to be stable and usable when needed.</li>
+<li>SLOWLOG now logs the offending client name and address. Note that this is a backward compatibility breakage in case old code assumes that the slowlog entry is composed of exactly three entries.</li>
+<li>The modules native data types RDB format changed.</li>
+<li>The AOF check utility is now able to deal with RDB preambles.</li>
+<li>GEORADIUS_RO and GEORADIUSBYMEMBER_RO variants, not supporting the STORE option, were added in order to allow read-only scaling of such queries.</li>
+<li>HSET is now variadic, and HMSET is considered deprecated (but will be supported for years to come). Please use HSET in new code.</li>
+<li>GEORADIUS huge radius (&gt;= ~6000 km) corner cases fixed, certain elements near the edges were not returned.</li>
+<li>DEBUG DIGEST modules API added.</li>
+<li>HyperLogLog commands no longer crash on certain input (non HLL) strings.</li>
+<li>Fixed SLAVEOF inside MULTI/EXEC blocks.</li>
+<li>Many other minor bug fixes and improvements.</li>
+</ul>
+</blockquote>
+<h3 id="4-3-模块系统"><a href="#4-3-模块系统" class="headerlink" title="4.3 模块系统"></a>4.3 模块系统</h3><p>Redis 4.0 发生的最大变化就是加入了模块系统， 这个系统可以让用户通过自己编写的代码来扩展和实现 Redis 本身并不具备的功能， 具体使用方法可以参考 antirez 的博文《Redis Loadable Module System》： <a href="http://antirez.com/news/106" target="_blank" rel="noopener">http://antirez.com/news/106</a><br>因为模块系统是通过高层次 API 实现的， 它与 Redis 内核本身完全分离、互不干扰， 所以用户可以在有需要的情况下才启用这个功能， 以下是 redis.conf 中记载的模块载入方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">################################## MODULES #####################################</span><br><span class="line"></span><br><span class="line"># Load modules at startup. If the server is not able to load modules</span><br><span class="line"># it will abort. It is possible to use multiple loadmodule directives.</span><br><span class="line">#</span><br><span class="line"># loadmodule /path/to/my_module.so</span><br><span class="line"># loadmodule /path/to/other_module.so</span><br></pre></td></tr></table></figure></p>
+<p>目前已经有人使用这个功能开发了各种各样的模块， 比如 Redis Labs 开发的一些模块就可以在 <a href="http://redismodules.com" target="_blank" rel="noopener">http://redismodules.com</a> 看到， 此外 antirez 自己也使用这个功能开发了一个神经网络模块： <a href="https://github.com/antirez/neural-redis" target="_blank" rel="noopener">https://github.com/antirez/neural-redis</a><br>模块功能使得用户可以将 Redis 用作基础设施， 并在上面构建更多功能， 这给 Redis 带来了无数新的可能性。</p>
+<h3 id="4-4-PSYNC-2-0"><a href="#4-4-PSYNC-2-0" class="headerlink" title="4.4 PSYNC 2.0"></a>4.4 PSYNC 2.0</h3><p>新版本的 PSYNC 命令解决了旧版本的 Redis 在复制时的一些不够优化的地方：</p>
+<ul>
+<li>在旧版本 Redis 中， 如果一个从服务器在 FAILOVER 之后成为了新的主节点， 那么其他从节点在复制这个新主的时候就必须进行全量复制。 在 Redis 4.0 中， 新主和从服务器在处理这种情况时， 将在条件允许的情况下使用部分复制。</li>
+<li>在旧版本 Redis 中， 一个从服务器如果重启了， 那么它就必须与主服务器重新进行全量复制， 在 Redis 4.0 中， 只要条件允许， 主从在处理这种情况时将使用部分复制。</li>
+</ul>
+<h3 id="4-5-缓存驱逐策略优化"><a href="#4-5-缓存驱逐策略优化" class="headerlink" title="4.5 缓存驱逐策略优化"></a>4.5 缓存驱逐策略优化</h3><p>新添加了 Last Frequently Used 缓存驱逐策略， 具体信息见 antirez 的博文《Random notes on improving the Redis LRU algorithm》： <a href="http://antirez.com/news/109" target="_blank" rel="noopener">http://antirez.com/news/109</a><br>另外 Redis 4.0 还对已有的缓存驱逐策略进行了优化， 使得它们能够更健壮、高效、快速和精确。</p>
+<h3 id="4-6-非阻塞-DEL-、-FLUSHDB-和-FLUSHALL"><a href="#4-6-非阻塞-DEL-、-FLUSHDB-和-FLUSHALL" class="headerlink" title="4.6 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL"></a>4.6 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL</h3><p>在 Redis 4.0 之前， 用户在使用 DEL 命令删除体积较大的键， 又或者在使用 FLUSHDB 和 FLUSHALL 删除包含大量键的数据库时， 都可能会造成服务器阻塞。<br>为了解决以上问题， Redis 4.0 新添加了 UNLINK 命令， 这个命令是 DEL 命令的异步版本， 它可以将删除指定键的操作放在后台线程里面执行， 从而尽可能地避免服务器阻塞：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">127.0.0.1:7002&gt; set a test</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:7002&gt; get a</span><br><span class="line">&quot;test&quot;</span><br><span class="line">127.0.0.1:7002&gt; unlink a</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:7002&gt; get a</span><br><span class="line">(nil)</span><br></pre></td></tr></table></figure></p>
+<p>因为一些历史原因， 执行同步删除操作的 DEL 命令将会继续保留。<br>此外， Redis 4.0 中的 FLUSHDB 和 FLUSHALL 这两个命令都新添加了 ASYNC 选项， 带有这个选项的数据库删除操作将在后台线程进行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; FLUSHDB ASYNC</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">redis&gt; FLUSHALL ASYNC</span><br><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-7-交换数据库"><a href="#4-7-交换数据库" class="headerlink" title="4.7 交换数据库"></a>4.7 交换数据库</h3><p>Redis 4.0 对数据库命令的另外一个修改是新增了 SWAPDB 命令， 这个命令可以对指定的两个数据库进行互换： 比如说， 通过执行命令 SWAPDB 0 1 ， 我们可以将原来的数据库 0 变成数据库 1 ， 而原来的数据库 1 则变成数据库 0 。这种场景是在非集群模式下使用的，在集群模式是不支持切换数据库的。默认所有的节点使用index 0。<br>以下是一个使用 SWAPDB 的例子：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; SET your_name &quot;aibibang&quot;  -- 在数据库 0 中设置一个键</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">redis&gt; GET your_name</span><br><span class="line">&quot;aibibang&quot;</span><br><span class="line"></span><br><span class="line">redis&gt; SWAPDB 0 1  -- 互换数据库 0 和数据库 1</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">redis&gt; GET your_name  -- 现在的数据库 0 已经没有之前设置的键了</span><br><span class="line">(nil)</span><br><span class="line"></span><br><span class="line">redis&gt; SELECT 1  -- 切换到数据库 1</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line">redis[1]&gt; GET your_name  -- 之前在数据库 0 设置的键现在可以在数据库 1 找到</span><br><span class="line">&quot;aibibang&quot;                 -- 证明两个数据库已经互换</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-8-混合-RDB-AOF-持久化格式"><a href="#4-8-混合-RDB-AOF-持久化格式" class="headerlink" title="4.8 混合 RDB-AOF 持久化格式"></a>4.8 混合 RDB-AOF 持久化格式</h3><p>Redis 4.0 新增了 RDB-AOF 混合持久化格式， 这是一个可选的功能， 在开启了这个功能之后， AOF 重写产生的文件将同时包含 RDB 格式的内容和 AOF 格式的内容， 其中 RDB 格式的内容用于记录已有的数据， 而 AOF 格式的内存则用于记录最近发生了变化的数据， 这样 Redis 就可以同时兼有 RDB 持久化和 AOF 持久化的优点 —— 既能够快速地生成重写文件， 也能够在出现问题时， 快速地载入数据。<br>这个功能可以通过 aof-use-rdb-preamble 选项进行开启， redis.conf 文件中记录了这个选项的使用方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"> When rewriting the AOF file, Redis is able to use an RDB preamble in the</span><br><span class="line"># AOF file for faster rewrites and recoveries. When this option is turned</span><br><span class="line"># on the rewritten AOF file is composed of two different stanzas:</span><br><span class="line">#</span><br><span class="line">#   [RDB file][AOF tail]</span><br><span class="line">#</span><br><span class="line"># When loading Redis recognizes that the AOF file starts with the &quot;REDIS&quot;</span><br><span class="line"># string and loads the prefixed RDB file, and continues loading the AOF</span><br><span class="line"># tail.</span><br><span class="line">#</span><br><span class="line"># This is currently turned off by default in order to avoid the surprise</span><br><span class="line"># of a format change, but will at some point be used as the default.</span><br><span class="line">aof-use-rdb-preamble no</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-9-内存命令"><a href="#4-9-内存命令" class="headerlink" title="4.9 内存命令"></a>4.9 内存命令</h3><p>新添加了一个 MEMORY 命令， 这个命令可以用于视察内存使用情况， 并进行相应的内存管理操作：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:7002&gt; memory help</span><br><span class="line">1) &quot;MEMORY USAGE &lt;key&gt; [SAMPLES &lt;count&gt;] - Estimate memory usage of key&quot;</span><br><span class="line">2) &quot;MEMORY STATS                         - Show memory usage details&quot;</span><br><span class="line">3) &quot;MEMORY PURGE                         - Ask the allocator to release memory&quot;</span><br><span class="line">4) &quot;MEMORY MALLOC-STATS                  - Show allocator internal stats&quot;</span><br></pre></td></tr></table></figure></p>
+<p>其中， 使用 MEMORY USAGE 子命令可以估算储存给定键所需的内存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">127.0.0.1:7002&gt; set truman aibibang</span><br><span class="line">-&gt; Redirected to slot [2113] located at 127.0.0.1:7000</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:7000&gt; memory usage truman</span><br><span class="line">(integer) 59</span><br></pre></td></tr></table></figure></p>
+<p>使用 MEMORY STATS 子命令可以查看 Redis 当前的内存使用情况：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:7000&gt; memory stats</span><br><span class="line"> 1) &quot;peak.allocated&quot;</span><br><span class="line"> 2) (integer) 2228415</span><br><span class="line"> 3) &quot;total.allocated&quot;</span><br><span class="line"> 4) (integer) 2228474</span><br><span class="line"> 5) &quot;startup.allocated&quot;</span><br><span class="line"> 6) (integer) 1054396</span><br><span class="line"> 7) &quot;replication.backlog&quot;</span><br><span class="line"> 8) (integer) 1048584</span><br><span class="line"> 9) &quot;clients.slaves&quot;</span><br><span class="line">10) (integer) 16858</span><br><span class="line">11) &quot;clients.normal&quot;</span><br><span class="line">12) (integer) 49630</span><br><span class="line">13) &quot;aof.buffer&quot;</span><br><span class="line">14) (integer) 0</span><br><span class="line">15) &quot;db.0&quot;</span><br><span class="line">16) 1) &quot;overhead.hashtable.main&quot;</span><br><span class="line">    2) (integer) 112</span><br><span class="line">    3) &quot;overhead.hashtable.expires&quot;</span><br><span class="line">    4) (integer) 0</span><br><span class="line">17) &quot;overhead.total&quot;</span><br><span class="line">18) (integer) 2169580</span><br><span class="line">19) &quot;keys.count&quot;</span><br><span class="line">20) (integer) 2</span><br><span class="line">21) &quot;keys.bytes-per-key&quot;</span><br><span class="line">22) (integer) 587039</span><br><span class="line">23) &quot;dataset.bytes&quot;</span><br><span class="line">24) (integer) 58894</span><br><span class="line">25) &quot;dataset.percentage&quot;</span><br><span class="line">26) &quot;5.0161914825439453&quot;</span><br><span class="line">27) &quot;peak.percentage&quot;</span><br><span class="line">28) &quot;100.00264739990234&quot;</span><br><span class="line">29) &quot;fragmentation&quot;</span><br><span class="line">30) &quot;1.2773568630218506&quot;</span><br></pre></td></tr></table></figure></p>
+<p>使用 MEMORY PURGE 子命令可以要求分配器释放更多内存：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; MEMORY PURGE</span><br><span class="line">OK</span><br></pre></td></tr></table></figure></p>
+<p>使用 MEMORY MALLOC-STATS 子命令可以展示分配器内部状态：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis&gt; MEMORY MALLOC-STATS</span><br><span class="line">Stats not supported for the current allocator</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-10-兼容NAT和Docker"><a href="#4-10-兼容NAT和Docker" class="headerlink" title="4.10 兼容NAT和Docker"></a>4.10 兼容NAT和Docker</h3><p>Redis 4.0 将兼容 NAT 和 Docker ， 具体的使用方法在 redis.conf 中有记载：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">########################## CLUSTER DOCKER/NAT support  ########################</span><br><span class="line"># In certain deployments, Redis Cluster nodes address discovery fails, because</span><br><span class="line"># addresses are NAT-ted or because ports are forwarded (the typical case is</span><br><span class="line"># Docker and other containers).</span><br><span class="line">#</span><br><span class="line"># In order to make Redis Cluster working in such environments, a static</span><br><span class="line"># configuration where each node known its public address is needed. The</span><br><span class="line"># following two options are used for this scope, and are:</span><br><span class="line">#</span><br><span class="line"># * cluster-announce-ip</span><br><span class="line"># * cluster-announce-port</span><br><span class="line"># * cluster-announce-bus-port</span><br><span class="line">#</span><br><span class="line"># Each instruct the node about its address, client port, and cluster message</span><br><span class="line"># bus port. The information is then published in the header of the bus packets</span><br><span class="line"># so that other nodes will be able to correctly map the address of the node</span><br><span class="line"># publishing the information.</span><br><span class="line">#</span><br><span class="line"># If the above options are not used, the normal Redis Cluster auto-detection</span><br><span class="line"># will be used instead.</span><br><span class="line">#</span><br><span class="line"># Note that when remapped, the bus port may not be at the fixed offset of</span><br><span class="line"># clients port + 10000, so you can specify any port and bus-port depending</span><br><span class="line"># on how they get remapped. If the bus-port is not set, a fixed offset of</span><br><span class="line"># 10000 will be used as usually.</span><br><span class="line">#</span><br><span class="line"># Example:</span><br><span class="line">#</span><br><span class="line"># cluster-announce-ip 10.1.1.5</span><br><span class="line"># cluster-announce-port 6379</span><br><span class="line"># cluster-announce-bus-port 6380</span><br></pre></td></tr></table></figure>
+<h2 id="5-引用"><a href="#5-引用" class="headerlink" title="5. 引用"></a>5. 引用</h2><ol>
+<li><a href="http://blog.csdn.net/yin767833376/article/details/53518272" target="_blank" rel="noopener">Redis 4.0新功能介绍</a></li>
+<li><a href="https://github.com/antirez/redis/blob/05b81d2b02578d432329c87c93f975e582d14c0e/00-RELEASENOTES" target="_blank" rel="noopener">Redis 4.0 release note</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>原创不易，支持作者！</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Truman 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Truman</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://trumandu.github.io/2017/07/19/Redis4-0-新特性尝鲜/" title="Redis4.0 新特性尝鲜">http://trumandu.github.io/2017/07/19/Redis4-0-新特性尝鲜/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nosql/" rel="tag"># nosql</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+            
+              <div>
+                
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/01/oozie搭建及examples使用教程/" rel="next" title="oozie搭建及examples使用教程">
+                <i class="fa fa-chevron-left"></i> oozie搭建及examples使用教程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/19/Redis-运维shell-工具/" rel="prev" title="Redis 运维shell 工具">
+                Redis 运维shell 工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://blogstatic.aibibang.com/logo.JPG"
+                alt="Truman"/>
+            
+              <p class="site-author-name" itemprop="name">Truman</p>
+              <div class="site-description motion-element" itemprop="description">代码改变世界，程序设计人生</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/trumandu" title="GitHub &rarr; https://github.com/trumandu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/u/2549866887?is_all=1" title="Weibo &rarr; http://weibo.com/u/2549866887?is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"/></a>
+             </div>
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.aibibang.com" title="http://www.aibibang.com" rel="noopener" target="_blank">aibibang</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis4-0-新特性尝鲜"><span class="nav-number">1.</span> <span class="nav-text">Redis4.0 新特性尝鲜</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-目录结构"><span class="nav-number">1.1.</span> <span class="nav-text">1.目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-前言"><span class="nav-number">1.2.</span> <span class="nav-text">2. 前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-环境搭建"><span class="nav-number">1.3.</span> <span class="nav-text">3. 环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-下载"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1. 下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-编译安装"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2. 编译安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-新建集群"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3. 新建集群</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-特性尝鲜"><span class="nav-number">1.4.</span> <span class="nav-text">4. 特性尝鲜</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-注意事项"><span class="nav-number">1.4.1.</span> <span class="nav-text">4.1 注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-升级内容"><span class="nav-number">1.4.2.</span> <span class="nav-text">4.2 升级内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-模块系统"><span class="nav-number">1.4.3.</span> <span class="nav-text">4.3 模块系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-PSYNC-2-0"><span class="nav-number">1.4.4.</span> <span class="nav-text">4.4 PSYNC 2.0</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-缓存驱逐策略优化"><span class="nav-number">1.4.5.</span> <span class="nav-text">4.5 缓存驱逐策略优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-非阻塞-DEL-、-FLUSHDB-和-FLUSHALL"><span class="nav-number">1.4.6.</span> <span class="nav-text">4.6 非阻塞 DEL 、 FLUSHDB 和 FLUSHALL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-交换数据库"><span class="nav-number">1.4.7.</span> <span class="nav-text">4.7 交换数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-8-混合-RDB-AOF-持久化格式"><span class="nav-number">1.4.8.</span> <span class="nav-text">4.8 混合 RDB-AOF 持久化格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-9-内存命令"><span class="nav-number">1.4.9.</span> <span class="nav-text">4.9 内存命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-10-兼容NAT和Docker"><span class="nav-number">1.4.10.</span> <span class="nav-text">4.10 兼容NAT和Docker</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-引用"><span class="nav-number">1.5.</span> <span class="nav-text">5. 引用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Truman</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="https://utteranc.es/client.js"
+        repo="TrumanDu/comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz',
+                'X-LC-Key': 'WjkAtRTpnJdXCPemfmzRWvso',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

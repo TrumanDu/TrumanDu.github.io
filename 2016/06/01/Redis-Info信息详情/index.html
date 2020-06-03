@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Info信息 以下信息是在redis-cli中执行info命令，可能和redis cluster版本有点不同的地方，仅此作为参考。">
+<meta name="keywords" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis Info信息详情">
+<meta property="og:url" content="http://trumandu.github.io/2016/06/01/Redis-Info信息详情/index.html">
+<meta property="og:site_name" content="Truman&#39;s Blog">
+<meta property="og:description" content="Info信息 以下信息是在redis-cli中执行info命令，可能和redis cluster版本有点不同的地方，仅此作为参考。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2016-06-01T14:20:53.498Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis Info信息详情">
+<meta name="twitter:description" content="Info信息 以下信息是在redis-cli中执行info命令，可能和redis cluster版本有点不同的地方，仅此作为参考。">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://trumandu.github.io/2016/06/01/Redis-Info信息详情/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Redis Info信息详情 | Truman's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?baidu_analytics_token";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Truman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/trumandu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://trumandu.github.io/2016/06/01/Redis-Info信息详情/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Truman"/>
+      <meta itemprop="description" content="代码改变世界，程序设计人生"/>
+      <meta itemprop="image" content="http://blogstatic.aibibang.com/logo.JPG"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truman's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Redis Info信息详情
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-06-01 22:00:06 / 修改时间：22:20:53" itemprop="dateCreated datePublished" datetime="2016-06-01T22:00:06+08:00">2016-06-01</time>
+            
+
+            
+              
+
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/redis/" itemprop="url" rel="index"><span itemprop="name">redis</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2016/06/01/Redis-Info信息详情/" class="leancloud_visitors" data-flag-title="Redis Info信息详情">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Info信息"><a href="#Info信息" class="headerlink" title="Info信息"></a>Info信息</h4><hr>
+<p>以下信息是在redis-cli中执行info命令，可能和redis cluster版本有点不同的地方，仅此作为参考。<br><a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"># Server</span><br><span class="line">redis_version:2.8.19 ###redis版本号</span><br><span class="line">redis_git_sha1:00000000  ###git SHA1</span><br><span class="line">redis_git_dirty:0   ###git dirty flag</span><br><span class="line">redis_build_id:78796c63e58b72dc</span><br><span class="line">redis_mode:standalone   ###redis运行模式</span><br><span class="line">os:Linux 2.6.32-431.el6.x86_64 x86_64   ###os版本号</span><br><span class="line">arch_bits:64  ###64位架构</span><br><span class="line">multiplexing_api:epoll  ###调用epoll算法</span><br><span class="line">gcc_version:4.4.7   ###gcc版本号</span><br><span class="line">process_id:25899   ###服务器进程PID</span><br><span class="line">run_id:eae356ac1098c13b68f2b00fd7e1c9f93b1c6a2c   ###Redis的随机标识符(用于sentinel和集群)</span><br><span class="line">tcp_port:6379   ###Redis监听的端口号</span><br><span class="line">uptime_in_seconds:6419 ###Redis运行时长(s为单位)</span><br><span class="line">uptime_in_days:0  ###Redis运行时长(天为单位)</span><br><span class="line">hz:10</span><br><span class="line">lru_clock:10737922  ###以分钟为单位的自增时钟,用于LRU管理</span><br><span class="line">config_file:/etc/redis/redis.conf   ###redis配置文件</span><br><span class="line"></span><br><span class="line"># Clients</span><br><span class="line">connected_clients:1   ###已连接客户端的数量（不包括通过从属服务器连接的客户端）这个参数也要一定关注，有飙升和明显下降时都会有问题。即使不操作</span><br><span class="line">client_longest_output_list:0   ###当前连接的客户端中最长的输出列表</span><br><span class="line">client_biggest_input_buf:0   ###当前连接的客户端中最大的。输出缓存</span><br><span class="line">blocked_clients:0  ###正在等待阻塞命令（BLPOP、BRPOP、BRPOPLPUSH）的客户端的数量 需监控</span><br><span class="line"></span><br><span class="line"># Memory</span><br><span class="line">used_memory:2281560   ###由 Redis 分配器分配的内存总量，以字节（byte）为单位</span><br><span class="line">used_memory_human:2.18M   ###以更友好的格式输出redis占用的内存</span><br><span class="line">used_memory_rss:2699264   ###从操作系统的角度，返回 Redis 已分配的内存总量（俗称常驻集大小）。这个值和 top 、 ps 等命令的输出一致，包含了used_memory和内存碎片。</span><br><span class="line">used_memory_peak:22141272  ### Redis 的内存消耗峰值（以字节为单位）</span><br><span class="line">used_memory_peak_human:21.12M  ###以更友好的格式输出redis峰值内存占用</span><br><span class="line">used_memory_lua:35840  ###LUA引擎所使用的内存大小</span><br><span class="line">mem_fragmentation_ratio:1.18  ###   =used_memory_rss /used_memory 这两个参数都包含保存用户k-v数据的内存和redis内部不同数据结构需要占用的内存，并且RSS指的是包含操作系统给redis实例分配的内存，这里面还包含不连续分配所带来的开销。因此在理想情况下， used_memory_rss 的值应该只比 used_memory 稍微高一点儿。当 rss &gt; used ，且两者的值相差较大时，表示存在（内部或外部的）内存碎片。内存碎片的比率可以通过 mem_fragmentation_ratio 的值看出。当 used &gt; rss 时，表示 Redis 的部分内存被操作系统换出到交换空间了，在这种情况下，操作可能会产生明显的延迟。可以说这个值大于1.5或者小于1都是有问题的。当大于1.5的时候需要择机进行服务器重启。当小于1的时候需要对redis进行数据清理</span><br><span class="line">mem_allocator:jemalloc-3.6.0</span><br><span class="line"></span><br><span class="line"># Persistence</span><br><span class="line">loading:0  ###记录服务器是否正在载入持久化文件，1为正在加载</span><br><span class="line">rdb_changes_since_last_save:0   ###距离最近一次成功创建持久化文件之后，产生了多少次修改数据集的操作</span><br><span class="line">rdb_bgsave_in_progress:0   ###记录了服务器是否正在创建 RDB 文件，1为正在进行</span><br><span class="line">rdb_last_save_time:1420023749  ###最近一次成功创建 RDB 文件的 UNIX 时间戳</span><br><span class="line">rdb_last_bgsave_status:ok   ###最近一次创建 RDB 文件的结果是成功还是失败,失败标识为err，这个时候写入redis 的操作可能会停止，因为默认stop-writes-on-bgsave-error是开启的，这个时候如果需要尽快恢复写操作，可以手工将这个选项设置为no。</span><br><span class="line">rdb_last_bgsave_time_sec:0  ###最近一次创建 RDB 文件耗费的秒数</span><br><span class="line">rdb_current_bgsave_time_sec:-1  ###如果服务器正在创建 RDB 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数</span><br><span class="line">aof_enabled:1   ###AOF 是否处于打开状态，1为启用</span><br><span class="line">aof_rewrite_in_progress:0   ###服务器是否正在创建 AOF 文件</span><br><span class="line">aof_rewrite_scheduled:0   ###RDB 文件创建完毕之后，是否需要执行预约的 AOF 重写操作（因为在RDB时aof的rewrite会被阻塞一直到RDB结束）</span><br><span class="line">aof_last_rewrite_time_sec:-1  ###最近一次创建 AOF 文件耗费的时长</span><br><span class="line">aof_current_rewrite_time_sec:-1  ###如果服务器正在创建 AOF 文件，那么这个域记录的就是当前的创建操作已经耗费的秒数</span><br><span class="line">aof_last_bgrewrite_status:ok  ###最近一次创建 AOF 文件的结果是成功还是失败</span><br><span class="line">aof_last_write_status:ok </span><br><span class="line">aof_current_size:176265  ###AOF 文件目前的大小</span><br><span class="line">aof_base_size:176265  ###服务器启动时或者 AOF 重写最近一次执行之后，AOF 文件的大小</span><br><span class="line">aof_pending_rewrite:0  ###是否有 AOF 重写操作在等待 RDB 文件创建完毕之后执行</span><br><span class="line">aof_buffer_length:0   ###AOF 缓冲区的大小</span><br><span class="line">aof_rewrite_buffer_length:0  ###AOF 重写缓冲区的大小</span><br><span class="line">aof_pending_bio_fsync:0  ###后台 I/O 队列里面，等待执行的 fsync 调用数量</span><br><span class="line">aof_delayed_fsync:0###被延迟的 fsync 调用数量</span><br><span class="line">loading_start_time:1441769386   loading启动时间戳</span><br><span class="line">loading_total_bytes:1787767808   loading需要加载数据量</span><br><span class="line">loading_loaded_bytes:1587418182  已经加载的数据量</span><br><span class="line">loading_loaded_perc:88.79 加载百分比</span><br><span class="line">loading_eta_seconds:7   剩余时间</span><br><span class="line"></span><br><span class="line"># Stats</span><br><span class="line">total_connections_received:8466  ###服务器已接受的连接请求数量，注意这是个累计值。</span><br><span class="line">total_commands_processed:900668   ###服务器已执行的命令数量，这个数值需要持续监控，如果在一段时间内出现大范围波动说明系统要么出现大量请求，要么出现执行缓慢的操作。</span><br><span class="line">instantaneous_ops_per_sec:1   ###服务器每秒钟执行的命令数量</span><br><span class="line">total_net_input_bytes:82724170</span><br><span class="line">total_net_output_bytes:39509080</span><br><span class="line">instantaneous_input_kbps:0.07</span><br><span class="line">instantaneous_output_kbps:0.02</span><br><span class="line">rejected_connections:0  ###因为最大客户端数量限制而被拒绝的连接请求数量</span><br><span class="line">sync_full:2</span><br><span class="line">sync_partial_ok:0</span><br><span class="line">sync_partial_err:0</span><br><span class="line">expired_keys:0   ###因为过期而被自动删除的数据库键数量</span><br><span class="line">evicted_keys:0   ###因为最大内存容量限制而被驱逐（evict）的键数量。这个数值如果不是0则说明maxmemory被触发，并且    evicted_keys一直大于0，则系统的latency增加，此时可以临时提高最大内存，但这只是临时措施，需要从应用着手分析。</span><br><span class="line">keyspace_hits:0  ###查找数据库键成功的次数。可以计算命中率</span><br><span class="line">keyspace_misses:500000   ###查找数据库键失败的次数。</span><br><span class="line">pubsub_channels:0  ###目前被订阅的频道数量</span><br><span class="line">pubsub_patterns:0  ###目前被订阅的模式数量</span><br><span class="line">latest_fork_usec:402  ###最近一次 fork() 操作耗费的毫秒数</span><br><span class="line"></span><br><span class="line"># Replication</span><br><span class="line">role:master   ###如果当前服务器没有在复制任何其他服务器，那么这个域的值就是 master ；否则的话，这个域的值就是 slave 。注意，在创建复制链的时候，一个从服务器也可能是另一个服务器的主服务器</span><br><span class="line">connected_slaves:2   ###2个slaves</span><br><span class="line">slave0:ip=192.168.65.130,port=6379,state=online,offset=1639,lag=1</span><br><span class="line">slave1:ip=192.168.65.129,port=6379,state=online,offset=1639,lag=0</span><br><span class="line">master_repl_offset:1639</span><br><span class="line">repl_backlog_active:1</span><br><span class="line">repl_backlog_size:1048576</span><br><span class="line">repl_backlog_first_byte_offset:2</span><br><span class="line">repl_backlog_histlen:1638</span><br><span class="line"></span><br><span class="line"># CPU</span><br><span class="line">used_cpu_sys:41.87  ###Redis 服务器耗费的系统 CPU</span><br><span class="line">used_cpu_user:17.82  ###Redis 服务器耗费的用户 CPU</span><br><span class="line">used_cpu_sys_children:0.01  ###后台进程耗费的系统 CPU</span><br><span class="line">used_cpu_user_children:0.01  ###后台进程耗费的用户 CPU</span><br><span class="line"></span><br><span class="line"># Keyspace</span><br><span class="line">db0:keys=3101,expires=0,avg_ttl=0   ###keyspace 部分记录了数据库相关的统计信息，比如数据库的键数量、数据库过期键数量等。对于每个数据库，这个部分都会添加一行此信息</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>原创不易，支持作者！</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Truman 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Truman</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://trumandu.github.io/2016/06/01/Redis-Info信息详情/" title="Redis Info信息详情">http://trumandu.github.io/2016/06/01/Redis-Info信息详情/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+            
+              <div>
+                
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/01/Redis维护总结/" rel="next" title="Redis维护总结">
+                <i class="fa fa-chevron-left"></i> Redis维护总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/05/Redis-Cluster-批量操作实现/" rel="prev" title="Redis Cluster 批量操作实现">
+                Redis Cluster 批量操作实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://blogstatic.aibibang.com/logo.JPG"
+                alt="Truman"/>
+            
+              <p class="site-author-name" itemprop="name">Truman</p>
+              <div class="site-description motion-element" itemprop="description">代码改变世界，程序设计人生</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">110</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/trumandu" title="GitHub &rarr; https://github.com/trumandu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/u/2549866887?is_all=1" title="Weibo &rarr; http://weibo.com/u/2549866887?is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"/></a>
+             </div>
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.aibibang.com" title="http://www.aibibang.com" rel="noopener" target="_blank">aibibang</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Info信息"><span class="nav-number">1.</span> <span class="nav-text">Info信息</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Truman</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="https://utteranc.es/client.js"
+        repo="TrumanDu/comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz',
+                'X-LC-Key': 'WjkAtRTpnJdXCPemfmzRWvso',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
