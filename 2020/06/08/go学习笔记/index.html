@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="语法特殊声明_用法 用在import _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;  程序默认执行init方法  用在函数返回值 _, err := client.Do(req) 忽略相应的返回值   new函数内建的new函数也是一种创建变量的方法，new(type)表示创建一个type类型的匿名变量，并初始化为type类型的零值，返回变量的地址，指针">
+<meta name="keywords" content="笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go学习笔记">
+<meta property="og:url" content="http://trumandu.github.io/2020/06/08/go学习笔记/index.html">
+<meta property="og:site_name" content="Truman&#39;s Blog">
+<meta property="og:description" content="语法特殊声明_用法 用在import _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;  程序默认执行init方法  用在函数返回值 _, err := client.Do(req) 忽略相应的返回值   new函数内建的new函数也是一种创建变量的方法，new(type)表示创建一个type类型的匿名变量，并初始化为type类型的零值，返回变量的地址，指针">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-06-08T10:24:51.029Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="go学习笔记">
+<meta name="twitter:description" content="语法特殊声明_用法 用在import _ &amp;quot;github.com/go-sql-driver/mysql&amp;quot;  程序默认执行init方法  用在函数返回值 _, err := client.Do(req) 忽略相应的返回值   new函数内建的new函数也是一种创建变量的方法，new(type)表示创建一个type类型的匿名变量，并初始化为type类型的零值，返回变量的地址，指针">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://trumandu.github.io/2020/06/08/go学习笔记/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>go学习笔记 | Truman's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?baidu_analytics_token";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Truman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/trumandu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://trumandu.github.io/2020/06/08/go学习笔记/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Truman"/>
+      <meta itemprop="description" content="代码改变世界，程序设计人生"/>
+      <meta itemprop="image" content="http://blogstatic.aibibang.com/logo.JPG"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truman's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">go学习笔记
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-08 18:24:51" itemprop="dateCreated datePublished" datetime="2020-06-08T18:24:51+08:00">2020-06-08</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/go/" itemprop="url" rel="index"><span itemprop="name">go</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2020/06/08/go学习笔记/" class="leancloud_visitors" data-flag-title="go学习笔记">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><h3 id="特殊声明"><a href="#特殊声明" class="headerlink" title="特殊声明"></a>特殊声明</h3><h4 id="用法"><a href="#用法" class="headerlink" title="_用法"></a>_用法</h4><ul>
+<li><p>用在import <code>_ &quot;github.com/go-sql-driver/mysql&quot;</code></p>
+<p> 程序默认执行<code>init</code>方法</p>
+</li>
+<li><p>用在函数返回值 <code>_, err := client.Do(req)</code></p>
+<p>忽略相应的返回值</p>
+</li>
+</ul>
+<h4 id="new函数"><a href="#new函数" class="headerlink" title="new函数"></a>new函数</h4><p>内建的<code>new</code>函数也是一种创建变量的方法，<code>new(type)</code>表示创建一个<code>type</code>类型的匿名变量，并初始化为<code>type</code>类型的零值，返回变量的地址，指针类型为<code>*type</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p := new(int)   	// p, *int 类型, 指向匿名的 int 变量</span><br><span class="line">fmt.Println(*p) 	// 0</span><br><span class="line">*p = 2          	// 设置 int 匿名变量的值为 2</span><br><span class="line">fmt.Println(*p) 	// 2</span><br></pre></td></tr></table></figure>
+<p>如下函数完成同样的功能：创建变量，返回变量地址<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func newA() *int &#123;</span><br><span class="line">    return new(int)</span><br><span class="line">&#125;</span><br><span class="line">func newB() *int &#123;</span><br><span class="line">    var i int</span><br><span class="line">    return &amp;i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="基本类型"><a href="#基本类型" class="headerlink" title="基本类型"></a>基本类型</h3><p>bool</p>
+<p>string</p>
+<p>int  int8  int16  int32  int64<br>uint uint8 uint16 uint32 uint64 uintptr</p>
+<p>byte // uint8 的别名</p>
+<p>rune // int32 的别名<br>    // 表示一个 Unicode 码点</p>
+<p>float32 float64</p>
+<p>complex64 complex128<br>本例展示了几种类型的变量。 同导入语句一样，变量声明也可以“分组”成一个语法块。</p>
+<h3 id="命名返回值"><a href="#命名返回值" class="headerlink" title="命名返回值"></a>命名返回值</h3><p>没有参数的 return 语句返回已命名的返回值。也就是 <strong>直接</strong> 返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">func method() (x, y int) &#123;</span><br><span class="line">	x = 1</span><br><span class="line">	y = 2</span><br><span class="line">	return</span><br><span class="line">&#125;</span><br><span class="line">func main() &#123;</span><br><span class="line">	fmt.Println(method()) // 1 2</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="短变量声明"><a href="#短变量声明" class="headerlink" title="短变量声明"></a>短变量声明</h3><p>在函数中，简洁赋值语句 := 可在类型明确的地方代替 var 声明。</p>
+<p>函数外的每个语句都必须以关键字开始（var, func 等等），因此 := 结构不能在函数外使用。</p>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p><strong>指针声明</strong>：<code>var p *int</code></p>
+<p><strong>指针赋值</strong>：<code>var p *int = &amp;i</code> or <code>pp := &amp;i</code></p>
+<p><strong>空指针</strong>：nil</p>
+<p><strong>指针使用</strong>：主要经过三个步骤：声明、赋值和访问指针指向的变量的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var i int = 10</span><br><span class="line">var p *int = &amp;i</span><br><span class="line">*p = 12</span><br><span class="line">fmt.Println(p,*p)</span><br></pre></td></tr></table></figure></p>
+<h3 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">type Vertex struct &#123;</span><br><span class="line">	X, Y int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var (</span><br><span class="line">	v1 = Vertex&#123;1, 2&#125;  // 创建一个 Vertex 类型的结构体</span><br><span class="line">	v2 = Vertex&#123;X: 1&#125;  // Y:0 被隐式地赋予</span><br><span class="line">	v3 = Vertex&#123;&#125;      // X:0 Y:0</span><br><span class="line">	p  = &amp;Vertex&#123;1, 2&#125; // 创建一个 *Vertex 类型的结构体（指针）</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p><strong>数组声明及赋值</strong></p>
+<p>两种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">// 第一种</span><br><span class="line">var a [2]string</span><br><span class="line">a[0] = &quot;hello&quot;</span><br><span class="line">a[1] = &quot;world&quot;</span><br><span class="line">// 第二种</span><br><span class="line">aa :=[2]int&#123;10,20&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>遍历</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">   // 第一种</span><br><span class="line">for i, s := range a &#123;</span><br><span class="line">	fmt.Printf(&quot;%d : %s\n&quot;, i, s)</span><br><span class="line">&#125;</span><br><span class="line">   // 第二种</span><br><span class="line">for i := 0; i &lt; len(aa); i++ &#123;</span><br><span class="line">	fmt.Printf(&quot;%d : %d\n&quot;, i, aa[i])</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><strong>map声明及赋值</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 第一种</span><br><span class="line">var m = make(map[string]string)</span><br><span class="line">m[&quot;a&quot;] = &quot;A&quot;</span><br><span class="line">m[&quot;b&quot;] = &quot;B&quot;</span><br><span class="line">// 第二种</span><br><span class="line">var m = map[string]string&#123;</span><br><span class="line">		&quot;a&quot;:&quot;A&quot;,</span><br><span class="line">		&quot;b&quot;:&quot;B&quot;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>遍历</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<h3 id="slice-切片"><a href="#slice-切片" class="headerlink" title="slice 切片"></a>slice 切片</h3><p>切片并不存储任何数据，它只是描述了底层数组中的一段。</p>
+<p>更改切片的元素会修改其底层数组中对应的元素。</p>
+<p>与它共享底层数组的切片都会观测到这些修改。</p>
+<p><strong>声明</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">a := [5]int&#123;1,2,3,4,5&#125;</span><br><span class="line"></span><br><span class="line">// 类型 []T 表示一个元素类型为 T 的切片</span><br><span class="line">// 第一种 不指定具体大小</span><br><span class="line">q := []int&#123;2, 3, 5, 7, 11, 13&#125;</span><br><span class="line">// 第二种，类型自动推断</span><br><span class="line">qq := a[0:2]</span><br><span class="line">// 第三种，声明为切片</span><br><span class="line">var s []int =  a[1:4]</span><br><span class="line">// 第四种</span><br><span class="line">aa := make([]int, 5)</span><br></pre></td></tr></table></figure></p>
+<p><strong>用法</strong></p>
+<p>切片 s 的长度和容量可通过表达式 <code>len(s)</code> 和 <code>cap(s)</code> 来获取。</p>
+<h2 id="流程控制语句：for、if、else、switch-和-defer"><a href="#流程控制语句：for、if、else、switch-和-defer" class="headerlink" title="流程控制语句：for、if、else、switch 和 defer"></a>流程控制语句：for、if、else、switch 和 defer</h2><h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sum := 0</span><br><span class="line">for i := 0; i &lt; 10; i++ &#123;</span><br><span class="line">	sum += i</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化语句和后置语句是可选的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for ; sum &lt; 1000; &#123;</span><br><span class="line">	sum += sum</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>for 是 Go 中的 “while”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for sum &lt; 10 &#123;</span><br><span class="line">	sum += 1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>无限循环<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for &#123;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if  sum==0 &#123;</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>同 for 一样， if 语句可以在条件表达式前执行一个简单的语句。<strong>该语句声明的变量作用域仅在 if 之内</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">if sum = 1 ; sum==1 &#123;</span><br><span class="line">	fmt.Println(sum)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h3><p>defer 语句会将函数推迟到外层函数返回之后执行。推迟调用的函数其参数会立即求值，但直到外层函数返回前该函数都不会被调用。 个人猜测用途是关闭资源，处理异常等。</p>
+<p>推迟的函数调用会被压入一<strong>个栈</strong>中。当外层函数返回时，被推迟的函数会按照后进先出的顺序调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func main() &#123;</span><br><span class="line">	defer fmt.Println(&quot;world&quot;)</span><br><span class="line"></span><br><span class="line">	fmt.Println(&quot;hello&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h2><p>go默认有个轻量级测试框架，可以使用<code>go test</code>命令和<code>testing</code>包</p>
+<p>创建一个文件，文件名以<code>_test.go</code>结尾,函数名为<code>TestXXX</code>,并且传递参数<code>(t *testing.T)</code></p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">package morestrings</span><br><span class="line"></span><br><span class="line">import &quot;testing&quot;</span><br><span class="line"></span><br><span class="line">func TestReverseRunes(t *testing.T) &#123;</span><br><span class="line">	cases := []struct &#123;</span><br><span class="line">		in, want string</span><br><span class="line">	&#125;&#123;</span><br><span class="line">		&#123;&quot;Hello, world&quot;, &quot;dlrow ,olleH&quot;&#125;,</span><br><span class="line">		&#123;&quot;Hello, 世界&quot;, &quot;界世 ,olleH&quot;&#125;,</span><br><span class="line">		&#123;&quot;&quot;, &quot;&quot;&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">	for _, c := range cases &#123;</span><br><span class="line">		got := ReverseRunes(c.in)</span><br><span class="line">		if got != c.want &#123;</span><br><span class="line">			t.Errorf(&quot;ReverseRunes(%q) == %q, want %q&quot;, c.in, got, c.want)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后执行命令<code>go test</code></p>
+<h2 id="方法和接口"><a href="#方法和接口" class="headerlink" title="方法和接口"></a>方法和接口</h2><h3 id="函数与方法区别"><a href="#函数与方法区别" class="headerlink" title="函数与方法区别"></a>函数与方法区别</h3><p><strong>方法在func关键字后是接收者而不是函数名</strong></p>
+<ol>
+<li><p>普通函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func function_name([parameter list]) [return_types] &#123;</span><br><span class="line">函数体</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>方法(如struct方法)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func (variable_name variable_data_type) method_name([parameter list]) [return_type]&#123;</span><br><span class="line">/* 函数体*/</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>使用区别</strong> </p>
+<p>函数: <code>function_name()</code>  函数有参数的话，必须保持类型一致，否则编译失败。</p>
+<p>方法：<code>p.method_name()</code>其中p可以为指针，也可以为值（p为结构体的值）</p>
+<p>方法的接受者可以为指针，也可以为值。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">func (v Vertex) Abs() float64 &#123;</span><br><span class="line">	return math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">	v := Vertex&#123;3, 4&#125;</span><br><span class="line">	fmt.Println(v.Abs())</span><br><span class="line">	</span><br><span class="line">	p := &amp;Vertex&#123;4, 3&#125;</span><br><span class="line">	fmt.Println(p.Abs())</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用指针接收者的原因有二：</strong></p>
+<ol>
+<li><p>方法能够修改其接收者指向的值。</p>
+</li>
+<li><p>这样可以避免在每次调用方法时复制该值。若值的类型为大型结构体时，这样做会更加高效。</p>
+</li>
+</ol>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>如果一个类型实现了一个接口需要的<strong>所有方法</strong>，那么该类型就实现了这个接口。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">type User struct &#123;</span><br><span class="line">	name string</span><br><span class="line">	age  int</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">type I interface &#123;</span><br><span class="line">	Name()</span><br><span class="line">	Age()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (u User)Name() &#123;</span><br><span class="line">	fmt.Printf(&quot;Name:%v\n&quot;, u.name)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (u User)Age() &#123;</span><br><span class="line">	fmt.Printf(&quot;Age:%v\n&quot;, u.age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	var u I = User&#123;&quot;truman&quot;,18&#125;</span><br><span class="line">	u.Name()</span><br><span class="line">	u.Age()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h4><p>类型断言 提供了访问接口值底层具体值的方式。<code>t := i.(T)</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var a interface&#123;&#125; = 11</span><br><span class="line">s:= a.(int)</span><br><span class="line">fmt.Println(s) //11</span><br><span class="line"></span><br><span class="line">b,ok:= a.(string)</span><br><span class="line">fmt.Println(b,ok)// false</span><br></pre></td></tr></table></figure></p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><p>使用<code>go f(a)</code>即可新建一个goroutine</p>
+<h3 id="信道"><a href="#信道" class="headerlink" title="信道"></a>信道</h3><p>声明一个信道<code>c := make(chan int)</code></p>
+<p>带缓存的信道 <code>c := make(chan int,10)</code></p>
+<p>仅当信道的缓冲区填满后，向其发送数据时才会阻塞。当缓冲区为空时，接受方会阻塞。</p>
+<p>通过channel可以实现唤醒线程，例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">go func() &#123;</span><br><span class="line">	data := &quot;hello value:stop&quot;</span><br><span class="line">	fmt.Println(data)</span><br><span class="line">	time.Sleep(1000000000 * 10)</span><br><span class="line">	ch &lt;- data</span><br><span class="line">&#125;()</span><br><span class="line">&lt;-ch</span><br><span class="line">fmt.Println(&quot;execute next business.&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="range-close"><a href="#range-close" class="headerlink" title="range/close"></a>range/close</h4><p>只有发送者才能关闭信道<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">ch := make(chan string)</span><br><span class="line">go func() &#123;</span><br><span class="line">	for i:= range ch &#123;</span><br><span class="line">		if  i==&quot;hello value:5&quot; &#123;</span><br><span class="line">			time.Sleep(1000000000*10)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(i)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;()</span><br><span class="line"></span><br><span class="line">for i := 0; i &lt; 10; i++ &#123;</span><br><span class="line">	data := &quot;hello value:&quot;+fmt.Sprintf(&quot;%d&quot;, i)</span><br><span class="line">	ch &lt;- data</span><br><span class="line">&#125;</span><br><span class="line">close(ch)</span><br></pre></td></tr></table></figure></p>
+<h4 id="sync-Mutex"><a href="#sync-Mutex" class="headerlink" title="sync.Mutex"></a>sync.Mutex</h4><p>互斥锁</p>
+<p>实现从0加到1000<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">type Account struct &#123;</span><br><span class="line">     money int</span><br><span class="line">	 mux sync.Mutex</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func (a *Account)Inc()  &#123;</span><br><span class="line">	a.mux.Lock()</span><br><span class="line">    a.money++</span><br><span class="line">    fmt.Println(a.money)</span><br><span class="line">    defer a.mux.Unlock()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	a:=Account&#123;money: 0&#125;</span><br><span class="line">	for i := 0; i &lt;1000; i++ &#123;</span><br><span class="line">		go a.Inc()</span><br><span class="line">	&#125;</span><br><span class="line">	time.Sleep(time.Second*10)</span><br><span class="line">	fmt.Printf(&quot;acount money:%d\n&quot;, a.money)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="学习资源"><a href="#学习资源" class="headerlink" title="学习资源"></a>学习资源</h2><ol>
+<li><a href="https://tour.go-zh.org/" target="_blank" rel="noopener">https://tour.go-zh.org/</a></li>
+<li><a href="https://golang.org/doc/code.html" target="_blank" rel="noopener">How to Write Go Code</a></li>
+<li><a href="https://wizardforcel.gitbooks.io/gopl-zh/content/" target="_blank" rel="noopener">Go語言聖經（中文版）</a></li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://golang.org/doc/code.html#Testing" target="_blank" rel="noopener">https://golang.org/doc/code.html#Testing</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>原创不易，支持作者！</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Truman 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Truman</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://trumandu.github.io/2020/06/08/go学习笔记/" title="go学习笔记">http://trumandu.github.io/2020/06/08/go学习笔记/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/笔记/" rel="tag"># 笔记</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+            
+              <div>
+                
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/16/开源项目KafkaCenter-版本持续集成（CI）实践/" rel="next" title="开源项目KafkaCenter 版本持续集成（CI）实践">
+                <i class="fa fa-chevron-left"></i> 开源项目KafkaCenter 版本持续集成（CI）实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://blogstatic.aibibang.com/logo.JPG"
+                alt="Truman"/>
+            
+              <p class="site-author-name" itemprop="name">Truman</p>
+              <div class="site-description motion-element" itemprop="description">代码改变世界，程序设计人生</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">111</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/trumandu" title="GitHub &rarr; https://github.com/trumandu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/u/2549866887?is_all=1" title="Weibo &rarr; http://weibo.com/u/2549866887?is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"/></a>
+             </div>
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.aibibang.com" title="http://www.aibibang.com" rel="noopener" target="_blank">aibibang</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#语法"><span class="nav-number">1.</span> <span class="nav-text">语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊声明"><span class="nav-number">1.1.</span> <span class="nav-text">特殊声明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用法"><span class="nav-number">1.1.1.</span> <span class="nav-text">_用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#new函数"><span class="nav-number">1.1.2.</span> <span class="nav-text">new函数</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本类型"><span class="nav-number">1.2.</span> <span class="nav-text">基本类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命名返回值"><span class="nav-number">1.3.</span> <span class="nav-text">命名返回值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短变量声明"><span class="nav-number">1.4.</span> <span class="nav-text">短变量声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#指针"><span class="nav-number">1.5.</span> <span class="nav-text">指针</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结构体"><span class="nav-number">1.6.</span> <span class="nav-text">结构体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数组"><span class="nav-number">1.7.</span> <span class="nav-text">数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">1.8.</span> <span class="nav-text">map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#slice-切片"><span class="nav-number">1.9.</span> <span class="nav-text">slice 切片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程控制语句：for、if、else、switch-和-defer"><span class="nav-number">2.</span> <span class="nav-text">流程控制语句：for、if、else、switch 和 defer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#for"><span class="nav-number">2.1.</span> <span class="nav-text">for</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">2.2.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#defer"><span class="nav-number">2.3.</span> <span class="nav-text">defer</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试"><span class="nav-number">3.</span> <span class="nav-text">测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法和接口"><span class="nav-number">4.</span> <span class="nav-text">方法和接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#函数与方法区别"><span class="nav-number">4.1.</span> <span class="nav-text">函数与方法区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口"><span class="nav-number">4.2.</span> <span class="nav-text">接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类型断言"><span class="nav-number">4.2.1.</span> <span class="nav-text">类型断言</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发"><span class="nav-number">5.</span> <span class="nav-text">并发</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#信道"><span class="nav-number">5.1.</span> <span class="nav-text">信道</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#range-close"><span class="nav-number">5.1.1.</span> <span class="nav-text">range/close</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sync-Mutex"><span class="nav-number">5.1.2.</span> <span class="nav-text">sync.Mutex</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#学习资源"><span class="nav-number">6.</span> <span class="nav-text">学习资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">7.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Truman</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="https://utteranc.es/client.js"
+        repo="TrumanDu/comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz',
+                'X-LC-Key': 'WjkAtRTpnJdXCPemfmzRWvso',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
