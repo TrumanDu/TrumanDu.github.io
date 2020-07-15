@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2"/>
+
+<link rel="stylesheet" href="/css/main.css?v=7.0.1"/>
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=7.0.1">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=7.0.1">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=7.0.1" color="#222">
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '7.0.1',
+    sidebar: {"position":"left","display":"always","offset":12,"onmobile":false,"dimmer":false},
+    back2top: true,
+    back2top_sidebar: false,
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="ice-scripts到ice.js实战迁移之路 为什么要升级？   纬度\版本 icejs 1.x ice-scripts 2.x ice-scripts 1.x     定位 研发框架 构建工具 构建工具   配置文件 build.json ice.config.js package.json(buildConfig)   文档地址 访问 访问 访问   发布时间 2020.02 2019.0">
+<meta name="keywords" content="技术分享">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ice-scripts到ice.js实战迁移之路">
+<meta property="og:url" content="http://trumandu.github.io/2020/07/15/ice-scripts到ice-js实战迁移之路/index.html">
+<meta property="og:site_name" content="Truman&#39;s Blog">
+<meta property="og:description" content="ice-scripts到ice.js实战迁移之路 为什么要升级？   纬度\版本 icejs 1.x ice-scripts 2.x ice-scripts 1.x     定位 研发框架 构建工具 构建工具   配置文件 build.json ice.config.js package.json(buildConfig)   文档地址 访问 访问 访问   发布时间 2020.02 2019.0">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://github-readme-stats.vercel.app/api?username=TrumanDu&show_icons=true">
+<meta property="og:image" content="http://blogstatic.aibibang.com/icejs1.png">
+<meta property="og:image" content="http://blogstatic.aibibang.com/old_login.png">
+<meta property="og:image" content="http://blogstatic.aibibang.com/old_home.png">
+<meta property="og:image" content="http://blogstatic.aibibang.com/new_login.png">
+<meta property="og:image" content="http://blogstatic.aibibang.com/new_home.png">
+<meta property="og:updated_time" content="2020-07-15T13:57:47.097Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ice-scripts到ice.js实战迁移之路">
+<meta name="twitter:description" content="ice-scripts到ice.js实战迁移之路 为什么要升级？   纬度\版本 icejs 1.x ice-scripts 2.x ice-scripts 1.x     定位 研发框架 构建工具 构建工具   配置文件 build.json ice.config.js package.json(buildConfig)   文档地址 访问 访问 访问   发布时间 2020.02 2019.0">
+<meta name="twitter:image" content="https://github-readme-stats.vercel.app/api?username=TrumanDu&show_icons=true">
+
+
+
+
+
+  
+  
+  <link rel="canonical" href="http://trumandu.github.io/2020/07/15/ice-scripts到ice-js实战迁移之路/"/>
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>ice-scripts到ice.js实战迁移之路 | Truman's Blog</title>
+  
+
+
+
+
+
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?baidu_analytics_token";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .motion-element,
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-title { opacity: initial; }
+
+  .use-motion .logo,
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Truman's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br/>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br/>分类</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/about/" rel="section"><i class="menu-item-icon fa fa-fw fa-user"></i> <br/>关于</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br/>归档</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br/>标签</a>
+
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+  
+  
+
+  
+
+  <a href="https://github.com/trumandu" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://trumandu.github.io/2020/07/15/ice-scripts到ice-js实战迁移之路/"/>
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Truman"/>
+      <meta itemprop="description" content="代码改变世界，程序设计人生"/>
+      <meta itemprop="image" content="http://blogstatic.aibibang.com/logo.JPG"/>
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Truman's Blog"/>
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">ice-scripts到ice.js实战迁移之路
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-07-15 21:57:47" itemprop="dateCreated datePublished" datetime="2020-07-15T21:57:47+08:00">2020-07-15</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端技术/" itemprop="url" rel="index"><span itemprop="name">前端技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+            <span id="/2020/07/15/ice-scripts到ice-js实战迁移之路/" class="leancloud_visitors" data-flag-title="ice-scripts到ice.js实战迁移之路">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ice-scripts到ice-js实战迁移之路"><a href="#ice-scripts到ice-js实战迁移之路" class="headerlink" title="ice-scripts到ice.js实战迁移之路"></a>ice-scripts到ice.js实战迁移之路</h1><p><img src="https://github-readme-stats.vercel.app/api?username=TrumanDu&amp;show_icons=true" alt="TrumanDu github stats"></p>
+<h2 id="为什么要升级？"><a href="#为什么要升级？" class="headerlink" title="为什么要升级？"></a>为什么要升级？</h2><table>
+<thead>
+<tr>
+<th>纬度\版本</th>
+<th>icejs 1.x</th>
+<th>ice-scripts 2.x</th>
+<th>ice-scripts 1.x</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>定位</td>
+<td>研发框架</td>
+<td>构建工具</td>
+<td>构建工具</td>
+</tr>
+<tr>
+<td>配置文件</td>
+<td>build.json</td>
+<td>ice.config.js</td>
+<td>package.json(buildConfig)</td>
+</tr>
+<tr>
+<td>文档地址</td>
+<td><a href="/docs/guide/about">访问</a></td>
+<td><a href="/docs/guide-0.x/about">访问</a></td>
+<td><a href="https://github.com/alibaba/ice/tree/master/docs/ice-scripts-1.x" target="_blank" rel="noopener">访问</a></td>
+</tr>
+<tr>
+<td>发布时间</td>
+<td>2020.02</td>
+<td>2019.06</td>
+<td>2018.02</td>
+</tr>
+<tr>
+<td>可渐进升级性</td>
+<td>好</td>
+<td>不好</td>
+<td>不好</td>
+</tr>
+<tr>
+<td>插件能力</td>
+<td>工程+运行时</td>
+<td>工程</td>
+<td>无</td>
+</tr>
+<tr>
+<td>工程配置</td>
+<td>强</td>
+<td>强</td>
+<td>弱</td>
+</tr>
+<tr>
+<td>运行时配置</td>
+<td>默认支持</td>
+<td>默认不支持</td>
+<td>默认不支持</td>
+</tr>
+<tr>
+<td>SSR</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
+<p>如果你看了这个对比还无法决定，那么说一说我迁移的原因：</p>
+<ol>
+<li>ice-scripts官方不维护，查找文档较难 </li>
+<li>解决技术债</li>
+<li>我想使用一些新的功能，例如：Hooks and Function Components(当然并不是说不升级就不能用)</li>
+<li>新的前端工程方式，我之所以这么命名，因为我不是一个专业的前端开发，无法将自己的注意力集中在前端领域，只好跟着大厂，这样就不会迷路。这次新版本配置的<code>eslint</code> <code>prettier</code>挺有用。</li>
+<li>前端权限的简洁化（之前推荐的是ant deisgn auth真心不好用）</li>
+<li>布局的简介化</li>
+</ol>
+<h2 id="Hooks-and-Function-Components扫盲"><a href="#Hooks-and-Function-Components扫盲" class="headerlink" title="Hooks and Function Components扫盲"></a>Hooks and Function Components扫盲</h2><h3 id="快速一览"><a href="#快速一览" class="headerlink" title="快速一览"></a>快速一览</h3><p>props非必须，两种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const Example = (props) =&gt; &#123;</span><br><span class="line">  // You can use Hooks here!</span><br><span class="line">  return &lt;div /&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function Example(props) &#123;</span><br><span class="line">  // You can use Hooks here!</span><br><span class="line">  return &lt;div /&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用useState处理函数组件的状态，例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import React, &#123; useState &#125; from &apos;react&apos;;</span><br><span class="line"></span><br><span class="line">  function Example() &#123;</span><br><span class="line">    const [count, setCount] = useState(0);</span><br><span class="line"></span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;p&gt;You clicked &#123;count&#125; times&lt;/p&gt;</span><br><span class="line">       &lt;button onClick=&#123;() =&gt; setCount(count + 1)&#125;&gt;</span><br><span class="line">        Click me</span><br><span class="line">       &lt;/button&gt;</span><br><span class="line">     &lt;/div&gt;</span><br><span class="line">   );</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里要注意的是setCount异步函数，它不会改变count,而是创建一个新的count。而且在接受同一个 state 对象时，即使其对象里的属性变了，但对象地址没变，是不会更新视图的。</p>
+<p><strong>函数中的 setXXX 注意事项：</strong></p>
+<p><strong>1. 不可局部更新视图</strong></p>
+<p><strong>2. 地址一定要变</strong></p>
+<h3 id="函数组件模拟生命周期"><a href="#函数组件模拟生命周期" class="headerlink" title="函数组件模拟生命周期"></a>函数组件模拟生命周期</h3><p>函数组件没有生命周期，但是 React Hooks API 提供了 React.useEffect 来解决此问题。</p>
+<h4 id="模拟-componentDidMount-第一次渲染"><a href="#模拟-componentDidMount-第一次渲染" class="headerlink" title="模拟 componentDidMount 第一次渲染"></a>模拟 componentDidMount 第一次渲染</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">      console.log(&quot;第一次渲染&quot;);</span><br><span class="line">&#125;,[])</span><br></pre></td></tr></table></figure>
+<h4 id="模拟-componentDidUpdate"><a href="#模拟-componentDidUpdate" class="headerlink" title="模拟 componentDidUpdate"></a>模拟 componentDidUpdate</h4><p>只有n变化才会调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">      console.log(&quot;n 变了&quot;);</span><br><span class="line">&#125;,[n])</span><br></pre></td></tr></table></figure></p>
+<p>任意值变化，都会调用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">      console.log(&quot;任意属性变了&quot;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<h4 id="模拟-componentWillUnmount"><a href="#模拟-componentWillUnmount" class="headerlink" title="模拟 componentWillUnmount"></a>模拟 componentWillUnmount</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">useEffect(()=&gt;&#123;</span><br><span class="line">      console.log(&quot;任意属性变了&quot;);</span><br><span class="line">      return ()=&gt;&#123;</span><br><span class="line">            console.log(&quot;该组件要销毁了&quot;)</span><br><span class="line">      &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="React函数式组件路由使用"><a href="#React函数式组件路由使用" class="headerlink" title="React函数式组件路由使用"></a>React函数式组件路由使用</h3><ul>
+<li>useHistory</li>
+<li>useLocation</li>
+<li>useParams</li>
+<li>useRouteMatch</li>
+</ul>
+<p>这里仅举例history的使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import &#123; useHistory &#125; from &quot;react-router-dom&quot;;</span><br><span class="line"></span><br><span class="line">function HomeButton() &#123;</span><br><span class="line">  let history = useHistory();</span><br><span class="line"></span><br><span class="line">  function handleClick() &#123;</span><br><span class="line">    history.push(&quot;/home&quot;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return (</span><br><span class="line">    &lt;button type=&quot;button&quot; onClick=&#123;handleClick&#125;&gt;</span><br><span class="line">      Go home</span><br><span class="line">    &lt;/button&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="迁移"><a href="#迁移" class="headerlink" title="迁移"></a>迁移</h2><p>迁移前项目:<a href="https://github.com/xaecbd/KafkaCenter/tree/v2.1.0/KafkaCenter-Frontend" target="_blank" rel="noopener">https://github.com/xaecbd/KafkaCenter/tree/v2.1.0/KafkaCenter-Frontend</a></p>
+<p>迁移后项目：<a href="https://github.com/xaecbd/KafkaCenter/tree/dev/KafkaCenter-Frontend" target="_blank" rel="noopener">https://github.com/xaecbd/KafkaCenter/tree/dev/KafkaCenter-Frontend</a></p>
+<p><strong>总体花费三天</strong>，代价还可接受。</p>
+<h2 id="迁移方式"><a href="#迁移方式" class="headerlink" title="迁移方式"></a>迁移方式</h2><p>最开始是按照官方文档迁移的，但是操作完成以后，发现无法运行。问题主要在于迁移文档未说明布局和菜单的迁移，这两块地方和之前相比有很大变化。最终采用新建pro项目模板，将原系统组件和页面迁移，这里就看出react 组件化的价值了。</p>
+<p>这里推荐一下vscode 中的ice插件，使用很简单，唯一问题是预览图片太小。</p>
+<h2 id="工程能力迁移"><a href="#工程能力迁移" class="headerlink" title="工程能力迁移"></a>工程能力迁移</h2><p>之前是package中配置的代理，插件。以及别名等。现在迁移到根目录的build.json</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;alias&quot;: &#123;</span><br><span class="line">    &quot;@utils&quot;: &quot;./src/utils/&quot;,</span><br><span class="line">    &quot;@components&quot;: &quot;./src/components&quot;,</span><br><span class="line">    &quot;@images&quot;: &quot;./public/images&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;outputDir&quot;: &quot;../KafkaCenter-Core/src/main/resources/static&quot;,</span><br><span class="line">  &quot;proxy&quot;: &#123;</span><br><span class="line">    &quot;/**&quot;: &#123;</span><br><span class="line">      &quot;enable&quot;: true,</span><br><span class="line">      &quot;target&quot;: &quot;http://127.0.0.1:8080&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;plugins&quot;: [</span><br><span class="line">    [</span><br><span class="line">      &quot;build-plugin-fusion&quot;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;themePackage&quot;: &quot;@alifd/theme-design-pro&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">      &quot;build-plugin-ice-auth&quot;</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">      &quot;build-plugin-moment-locales&quot;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;locales&quot;: [</span><br><span class="line">          &quot;zh-cn&quot;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    ],</span><br><span class="line">    [</span><br><span class="line">      &quot;build-plugin-css-assets-local&quot;,</span><br><span class="line">      &#123;</span><br><span class="line">          &quot;outputPath&quot;: &quot;assets&quot;,</span><br><span class="line">          &quot;relativeCssPath&quot;: &quot;/&quot;</span><br><span class="line">      &#125;</span><br><span class="line">  ]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中build-plugin-ice-auth是原项目没有的，这个主要是用来做项目权限的插件。</p>
+<h2 id="菜单迁移"><a href="#菜单迁移" class="headerlink" title="菜单迁移"></a>菜单迁移</h2><p>目录结构的调整：</p>
+<p>迁移前位于:<code>KafkaCenter-Frontend/src/menuConfig.js</code></p>
+<p>迁移后位于<code>KafkaCenter-Frontend/src/layouts/BasicLayout/menuConfig.js</code></p>
+<p>内容不用修改，权限有点变化，我后面再说</p>
+<h3 id="自定义菜单图标"><a href="#自定义菜单图标" class="headerlink" title="自定义菜单图标"></a>自定义菜单图标</h3><p>关于菜单图标问题，由于<code>FoundationSymbol</code>废弃，造成大量的图标丢失，默认显示的是<code>Icon</code>中的图标，但是这里面的图标很少，满足不了我的需求，因此我采用了自定义图标。</p>
+<p>官方无文档，只能自己摸索了。又是血泪史。。。</p>
+<p>在iconfont中新建项目，将自己选择的图标放入项目，然后下载，选择其中的js文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import iconfont from &apos;@/iconfont.js&apos;;</span><br><span class="line"></span><br><span class="line">const CustomIcon = Icon.createFromIconfontCN(iconfont);</span><br><span class="line"></span><br><span class="line">const headerMenuConfig = [];</span><br><span class="line">const asideMenuConfig = [</span><br><span class="line">  &#123;</span><br><span class="line">    name: &apos;Home&apos;,</span><br><span class="line">    path: &apos;/home/page&apos;,</span><br><span class="line">    icon: &lt;CustomIcon type=&quot;iconhome&quot;/&gt;,</span><br><span class="line">  &#125;,</span><br><span class="line">  &#123;</span><br><span class="line">    name: &apos;Favorites&apos;,</span><br><span class="line">    path: &apos;/favorite&apos;,</span><br><span class="line">    icon: &lt;CustomIcon type=&quot;iconFavoritestarrate&quot; /&gt;,</span><br><span class="line">  &#125;,</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure>
+<p><code>&lt;CustomIcon type=&quot;iconFavoritestarrate&quot; /&gt;</code> 这个就是自定义图标，type为你选择的图标的名字。</p>
+<p>你以为这样就结束了么？？？？ 后面发现存在图标不对齐</p>
+<p><img src="http://blogstatic.aibibang.com/icejs1.png" alt=""></p>
+<p>最后通过增加空格解决，这里要注意下NavItem可以通过<code>&amp;nbsp;&amp;nbsp;</code>,但是SubNav不行哇，通过<code>\u00a0\u00a0</code></p>
+<p>主要是修改<code>KafkaCenter-Frontend/src/layouts/BasicLayout/components/PageNav/index.jsx</code>代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">function getSubMenuOrItem(item, index,auth) &#123;</span><br><span class="line">  if(!isHasPower(auth,item))&#123;</span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  if (item.children &amp;&amp; item.children.some(child =&gt; child.name)) &#123;</span><br><span class="line">    const childrenItems = getNavMenuItems(item.children, index,auth);</span><br><span class="line"></span><br><span class="line">    if (childrenItems &amp;&amp; childrenItems.length &gt; 0) &#123;</span><br><span class="line">      const name = `\u00a0\u00a0$&#123;item.name&#125;`;</span><br><span class="line">      const subNav = (</span><br><span class="line">        &lt;SubNav key=&#123;index&#125; icon=&#123;item.icon&#125; label=&#123;name&#125;&gt;</span><br><span class="line">          &#123;childrenItems&#125;</span><br><span class="line">        &lt;/SubNav&gt;</span><br><span class="line">      );</span><br><span class="line">      return subNav;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">  const navItem = (</span><br><span class="line"></span><br><span class="line">    &lt;NavItem key=&#123;item.path&#125; icon=&#123;item.icon&#125;&gt;</span><br><span class="line">      &lt;Link to=&#123;item.path&#125;&gt;&amp;nbsp;&amp;nbsp;&#123;item.name&#125;&lt;/Link&gt;</span><br><span class="line">    &lt;/NavItem&gt;</span><br><span class="line">  );</span><br><span class="line">  </span><br><span class="line">  return navItem;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="路由迁移"><a href="#路由迁移" class="headerlink" title="路由迁移"></a>路由迁移</h2><p>新项目不需要<code>routerConfig.js</code>，将该文件内容迁移到<code>routes.js</code>，同时也不需要<code>router.jsx</code><br>目录结构的调整：</p>
+<p>迁移前位于:<code>KafkaCenter-Frontend/src/router.jsx|routerConfig.js</code></p>
+<p>迁移后位于<code>KafkaCenter-Frontend/src/routes.js</code></p>
+<p>这里要注意一下，因为存在<code>redirect</code>功能，也就是无法匹配，重定向到指定页面。还有路由支持层级结构。这里拿用户登录举例：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  path: &apos;/user&apos;,</span><br><span class="line">  component: UserLayout,</span><br><span class="line">  children: [</span><br><span class="line">    &#123;</span><br><span class="line">      path: &apos;/login&apos;,</span><br><span class="line">      component: Login,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      path: &apos;/&apos;,</span><br><span class="line">      redirect: &apos;/user/login&apos;,</span><br><span class="line">    &#125;,</span><br><span class="line">  ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>redirect一定要放在最后</strong>，血泪史。。。。</p>
+<h2 id="权限迁移"><a href="#权限迁移" class="headerlink" title="权限迁移"></a>权限迁移</h2><p>这点官网确实做的不错，基本参照官网即可完成。唯一不足的是菜单的权限搞了很久，因为没有文档，需要自己实现权限逻辑。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><p>安装插件，配置检查。<a href="https://ice.work/docs/guide/advance/auth#%E4%BD%BF%E7%94%A8%E6%9D%83%E9%99%90%E6%8F%92%E4%BB%B6" target="_blank" rel="noopener">参照官网</a></p>
+<p>然后在app.jsx初始化默认权限<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">const appConfig = &#123;</span><br><span class="line">  app: &#123;</span><br><span class="line">    //....</span><br><span class="line">    getInitialData: async () =&gt; &#123;</span><br><span class="line">      </span><br><span class="line">      const user = JSON.parse(sessionStorage.getItem(&apos;user&apos;));</span><br><span class="line">      if(user==null)&#123;</span><br><span class="line">        return &#123;</span><br><span class="line">          auth: &#123;</span><br><span class="line">            role: &apos;member&apos;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">      // 约定权限必须返回一个 auth 对象</span><br><span class="line">      // 返回的每个值对应一条权限</span><br><span class="line">      return &#123;</span><br><span class="line">        auth: &#123;</span><br><span class="line">          role:user.role === &apos;ADMIN&apos;?&apos;admin&apos;:&apos;member&apos;,</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<h3 id="修改权限"><a href="#修改权限" class="headerlink" title="修改权限"></a>修改权限</h3><p>我这里是登录后，修改用户权限</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> import &#123; useAuth &#125; from &apos;ice&apos;;</span><br><span class="line"> ....</span><br><span class="line"> const [auth, setAuth] = useAuth();</span><br><span class="line">// 更新权限</span><br><span class="line">function updateAuth() &#123;</span><br><span class="line">   setAuth(&#123; role:user.role === &apos;ADMIN&apos;?&apos;admin&apos;:&apos;member&apos; &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="菜单权限"><a href="#菜单权限" class="headerlink" title="菜单权限"></a>菜单权限</h3><p>这里就比较麻烦，不是修改麻烦，而是没有文档，自己琢磨，花费了一点时间。需要自己修改菜单的渲染逻辑。主要修改<code>KafkaCenter-Frontend/src/layouts/BasicLayout/components/PageNav/index.jsx</code></p>
+<p>首先在<code>menuConfig.js</code>中给需要设置权限的菜单处，增加<code>authority: [&#39;member&#39;],</code></p>
+<p>然后再修改<code>PageNav/index.jsx</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">const isHasPower=(auth,item)=&gt;&#123;</span><br><span class="line">  if(Object.getOwnPropertyNames(item).includes(&apos;authority&apos;))&#123;</span><br><span class="line">    const authority = item.authority.toString();</span><br><span class="line">    if(auth.role!==authority.toLocaleLowerCase())&#123;</span><br><span class="line">      return false;</span><br><span class="line">    &#125;else&#123;</span><br><span class="line">      return true;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;else&#123;</span><br><span class="line">    return true</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function getSubMenuOrItem(item, index,auth) &#123;</span><br><span class="line">  if(!isHasPower(auth,item))&#123;</span><br><span class="line">    return null;</span><br><span class="line">  &#125;</span><br><span class="line">  // 略....</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="按钮权限"><a href="#按钮权限" class="headerlink" title="按钮权限"></a>按钮权限</h3><p>推荐官方做法，自定义权限组件。例如我们的做法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import React from &apos;react&apos;;</span><br><span class="line">import &#123; useAuth &#125; from &apos;ice&apos;;</span><br><span class="line"></span><br><span class="line">function Auth(&#123; children, rolename &#125;) &#123;</span><br><span class="line">  const [auth] = useAuth();</span><br><span class="line">  // 有权限时直接渲染内容</span><br><span class="line">  if (rolename===auth.role) &#123;</span><br><span class="line">    return children;</span><br><span class="line">  &#125; else &#123;</span><br><span class="line">    // 无权限时显示指定 UI</span><br><span class="line">    return(&lt;div/&gt;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">export default Auth;</span><br></pre></td></tr></table></figure></p>
+<p>使用如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;Auth rolename=&quot;admin&quot;&gt;</span><br><span class="line">         &lt;span style=&#123;styles.separator&#125; /&gt;</span><br><span class="line">         &lt;span title=&quot;Modify&quot; style=&#123;styles.operBtn&#125; &gt;</span><br><span class="line">           &lt;a style=&#123;styles.link&#125; onClick=&#123;() =&gt; this.handleUpdate(record)&#125;&gt;</span><br><span class="line">             Modify</span><br><span class="line">           &lt;/a&gt;</span><br><span class="line">&lt;/Auth&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="布局迁移"><a href="#布局迁移" class="headerlink" title="布局迁移"></a>布局迁移</h2><p>登录页面重写，主页布局重写。其他的略。。下班了，懒得写了。</p>
+<h2 id="前后系统界面变化对比"><a href="#前后系统界面变化对比" class="headerlink" title="前后系统界面变化对比"></a>前后系统界面变化对比</h2><p>修改前：</p>
+<p><img src="http://blogstatic.aibibang.com/old_login.png" alt=""><br><img src="http://blogstatic.aibibang.com/old_home.png" alt=""></p>
+<p>修改后：<br><img src="http://blogstatic.aibibang.com/new_login.png" alt=""><br><img src="http://blogstatic.aibibang.com/new_home.png" alt=""></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://reactrouter.com/web/api/Hooks/usehistory" target="_blank" rel="noopener">https://reactrouter.com/web/api/Hooks/usehistory</a></li>
+<li><a href="https://www.cnblogs.com/lovevin/p/13231718.html" target="_blank" rel="noopener">React 的函数组件</a></li>
+<li><a href="https://reactjs.org/docs/hooks-state.html" target="_blank" rel="noopener">Using the State Hook</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+      <div>
+        <div id="reward-container">
+  <div>原创不易，支持作者！</div>
+  <button id="reward-button" disable="enable" onclick="var qr = document.getElementById(&quot;qr&quot;); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+
+    
+      
+      
+        
+      
+      <div style="display: inline-block">
+        <img src="/images/wechatpay.jpg" alt="Truman 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        
+
+
+
+
+  
+
+
+
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Truman</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    
+    <a href="http://trumandu.github.io/2020/07/15/ice-scripts到ice-js实战迁移之路/" title="ice-scripts到ice.js实战迁移之路">http://trumandu.github.io/2020/07/15/ice-scripts到ice-js实战迁移之路/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术分享/" rel="tag"># 技术分享</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+
+        
+
+        
+          
+          <div class="social_share">
+            
+            
+            
+              <div>
+                
+  <div class="bdsharebuttonbox">
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a href="#" class="bds_douban" data-cmd="douban" title="分享到豆瓣网"></a>
+    <a href="#" class="bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a>
+    <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+    <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+    <a href="#" class="bds_more" data-cmd="more"></a>
+    <a class="bds_count" data-cmd="count"></a>
+  </div>
+  <script>
+    window._bd_share_config = {
+      "common": {
+        "bdText": "",
+        "bdMini": "2",
+        "bdMiniList": false,
+        "bdPic": ""
+      },
+      "share": {
+        "bdSize": "16",
+        "bdStyle": "0"
+      },
+      "image": {
+        "viewList": ["tsina", "douban", "sqq", "qzone", "weixin", "twi", "fbook"],
+        "viewText": "分享到：",
+        "viewSize": "16"
+      }
+    }
+  </script>
+
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+              </div>
+            
+          </div>
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/01/设计模式总结/" rel="next" title="设计模式总结">
+                <i class="fa fa-chevron-left"></i> 设计模式总结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="http://blogstatic.aibibang.com/logo.JPG"
+                alt="Truman"/>
+            
+              <p class="site-author-name" itemprop="name">Truman</p>
+              <div class="site-description motion-element" itemprop="description">代码改变世界，程序设计人生</div>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">113</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  
+                    
+                      <a href="/categories/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                      <a href="/tags/">
+                    
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">25</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="https://github.com/trumandu" title="GitHub &rarr; https://github.com/trumandu" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  
+                  
+                    
+                  
+                  
+                    
+                  
+                  <a href="http://weibo.com/u/2549866887?is_all=1" title="Weibo &rarr; http://weibo.com/u/2549866887?is_all=1" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                </span>
+              
+            </div>
+          
+
+          
+             <div class="cc-license motion-element" itemprop="license">
+              
+              
+                
+              
+              
+              
+              <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"/></a>
+             </div>
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.aibibang.com" title="http://www.aibibang.com" rel="noopener" target="_blank">aibibang</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ice-scripts到ice-js实战迁移之路"><span class="nav-number">1.</span> <span class="nav-text">ice-scripts到ice.js实战迁移之路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要升级？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要升级？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hooks-and-Function-Components扫盲"><span class="nav-number">1.2.</span> <span class="nav-text">Hooks and Function Components扫盲</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#快速一览"><span class="nav-number">1.2.1.</span> <span class="nav-text">快速一览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数组件模拟生命周期"><span class="nav-number">1.2.2.</span> <span class="nav-text">函数组件模拟生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#模拟-componentDidMount-第一次渲染"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">模拟 componentDidMount 第一次渲染</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模拟-componentDidUpdate"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">模拟 componentDidUpdate</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模拟-componentWillUnmount"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">模拟 componentWillUnmount</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#React函数式组件路由使用"><span class="nav-number">1.2.3.</span> <span class="nav-text">React函数式组件路由使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迁移"><span class="nav-number">1.3.</span> <span class="nav-text">迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迁移方式"><span class="nav-number">1.4.</span> <span class="nav-text">迁移方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程能力迁移"><span class="nav-number">1.5.</span> <span class="nav-text">工程能力迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#菜单迁移"><span class="nav-number">1.6.</span> <span class="nav-text">菜单迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义菜单图标"><span class="nav-number">1.6.1.</span> <span class="nav-text">自定义菜单图标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#路由迁移"><span class="nav-number">1.7.</span> <span class="nav-text">路由迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限迁移"><span class="nav-number">1.8.</span> <span class="nav-text">权限迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">1.8.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改权限"><span class="nav-number">1.8.2.</span> <span class="nav-text">修改权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#菜单权限"><span class="nav-number">1.8.3.</span> <span class="nav-text">菜单权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按钮权限"><span class="nav-number">1.8.4.</span> <span class="nav-text">按钮权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#布局迁移"><span class="nav-number">1.9.</span> <span class="nav-text">布局迁移</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前后系统界面变化对比"><span class="nav-number">1.10.</span> <span class="nav-text">前后系统界面变化对比</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">1.11.</span> <span class="nav-text">参考</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+  
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 – <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Truman</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a> v7.0.1</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=7.0.1"></script>
+
+  <script src="/js/src/motion.js?v=7.0.1"></script>
+
+
+
+  
+  
+
+
+  <script src="/js/src/schemes/muse.js?v=7.0.1"></script>
+
+
+
+
+  
+  <script src="/js/src/scrollspy.js?v=7.0.1"></script>
+<script src="/js/src/post-details.js?v=7.0.1"></script>
+
+
+
+  
+
+
+  <script src="/js/src/next-boot.js?v=7.0.1"></script>
+
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    
+
+<script src="https://utteranc.es/client.js"
+        repo="TrumanDu/comments"
+        issue-term="pathname"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+  
+
+
+  
+
+
+
+
+  
+  
+  <script>
+    
+    function addCount(Counter) {
+      var $visitors = $('.leancloud_visitors');
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+
+      Counter('get', '/classes/Counter', { where: JSON.stringify({ url }) })
+        .done(function({ results }) {
+          if (results.length > 0) {
+            var counter = results[0];
+            
+            Counter('put', '/classes/Counter/' + counter.objectId, JSON.stringify({ time: { '__op': 'Increment', 'amount': 1 } }))
+            
+              .done(function() {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.time + 1);
+              })
+            
+              .fail(function ({ responseJSON }) {
+                console.log('Failed to save Visitor num, with error message: ' + responseJSON.error);
+              })
+          } else {
+            
+              Counter('post', '/classes/Counter', JSON.stringify({ title: title, url: url, time: 1 }))
+                .done(function() {
+                  var $element = $(document.getElementById(url));
+                  $element.find('.leancloud-visitors-count').text(1);
+                })
+                .fail(function() {
+                  console.log('Failed to create');
+                });
+            
+          }
+        })
+        .fail(function ({ responseJSON }) {
+          console.log('LeanCloud Counter Error: ' + responseJSON.code + ' ' + responseJSON.error);
+        });
+    }
+    
+
+    $(function() {
+      $.get('https://app-router.leancloud.cn/2/route?appId=' + 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz')
+        .done(function({ api_server }) {
+          var Counter = function(method, url, data) {
+            return $.ajax({
+              method: method,
+              url: 'https://' + api_server + '/1.1' + url,
+              headers: {
+                'X-LC-Id': 'XAGIUJQlIxDU7gUr0PcLNpkR-gzGzoHsz',
+                'X-LC-Key': 'WjkAtRTpnJdXCPemfmzRWvso',
+                'Content-Type': 'application/json',
+              },
+              data: data
+            });
+          };
+          
+            addCount(Counter);
+          
+        });
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
