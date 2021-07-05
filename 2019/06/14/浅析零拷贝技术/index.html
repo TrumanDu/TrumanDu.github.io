@@ -104,14 +104,14 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="前言 零拷贝（英语：Zero-copy）技术是指计算机执行操作时，CPU不需要先将数据从某处内存复制到另一个特定区域。这种技术通常用于通过网络传输文件时节省CPU周期和内存带宽。  零拷贝操作减少了在用户空间与内核空间之间切换模式的次数。 举例来说，如果要读取一个文件并通过网络发送它，传统方式下如下图，传统的I/O操作进行了4次用户空间与内核空间的上下文切换，以及4次数据拷贝。其中4次数据拷贝中包">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-2.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D-03.jpg">
-<meta property="og:updated_time" content="2019-06-14T13:50:09.701Z">
+<meta property="og:image" content="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png">
+<meta property="og:image" content="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-2.png">
+<meta property="og:image" content="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D-03.jpg">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.524Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析零拷贝技术">
 <meta name="twitter:description" content="前言 零拷贝（英语：Zero-copy）技术是指计算机执行操作时，CPU不需要先将数据从某处内存复制到另一个特定区域。这种技术通常用于通过网络传输文件时节省CPU周期和内存带宽。  零拷贝操作减少了在用户空间与内核空间之间切换模式的次数。 举例来说，如果要读取一个文件并通过网络发送它，传统方式下如下图，传统的I/O操作进行了4次用户空间与内核空间的上下文切换，以及4次数据拷贝。其中4次数据拷贝中包">
-<meta name="twitter:image" content="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png">
+<meta name="twitter:image" content="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png">
 
 
 
@@ -405,12 +405,24 @@
                 
               
 
-              <time title="创建时间：2019-06-14 21:49:43 / 修改时间：21:50:09" itemprop="dateCreated datePublished" datetime="2019-06-14T21:49:43+08:00">2019-06-14</time>
+              <time title="创建时间：2019-06-14 21:49:43" itemprop="dateCreated datePublished" datetime="2019-06-14T21:49:43+08:00">2019-06-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
               
             
           </span>
@@ -478,7 +490,7 @@
 </blockquote>
 <p>零拷贝操作减少了<strong>在用户空间与内核空间之间切换模式的次数</strong>。</p>
 <p>举例来说，如果要读取一个文件并通过网络发送它，传统方式下如下图，<strong>传统的I/O操作进行了4次用户空间与内核空间的上下文切换，以及4次数据拷贝。其中4次数据拷贝中包括了2次DMA拷贝和2次CPU拷贝</strong>。通过零拷贝技术完成相同的操作，减少了在用户空间与内核空间交互，并且不需要CPU复制数据。</p>
-<p><img src="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png" alt=""></p>
+<p><img src="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-1.png" alt=""></p>
 <h2 id="linux中零拷贝技术"><a href="#linux中零拷贝技术" class="headerlink" title="linux中零拷贝技术"></a>linux中零拷贝技术</h2><h3 id="Linux系统的“用户空间”和“内核空间”"><a href="#Linux系统的“用户空间”和“内核空间”" class="headerlink" title="Linux系统的“用户空间”和“内核空间”"></a>Linux系统的“用户空间”和“内核空间”</h3><p>从Linux系统上看，除了引导系统的BIN区，整个内存空间主要被分成两个部分：内核空间(Kernel space)、用户空间(User space)。</p>
 <p>“用户空间”和“内核空间”的空间、操作权限以及作用都是不一样的。</p>
 <p>内核空间是Linux自身使用的内存空间，主要提供给程序调度、内存分配、连接硬件资源等程序逻辑使用；用户空间则是提供给各个进程的主要空间。</p>
@@ -493,11 +505,11 @@
 </ul>
 <h3 id="mmap"><a href="#mmap" class="headerlink" title="mmap"></a>mmap</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">buf = mmap(diskfd, len);</span><br><span class="line">write(sockfd, buf, len);</span><br></pre></td></tr></table></figure>
 <p>应用程序调用mmap()，磁盘上的数据会通过DMA被拷贝的内核缓冲区，接着操作系统会把这段内核缓冲区与应用程序共享，这样就不需要把内核缓冲区的内容往用户空间拷贝。应用程序再调用write(),操作系统直接将内核缓冲区的内容拷贝到socket缓冲区中，这一切都发生在内核态，最后，socket缓冲区再把数据发到网卡去。</p>
-<p><img src="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-2.png" alt=""></p>
+<p><img src="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D%E6%8A%80%E6%9C%AF-2.png" alt=""></p>
 <p>使用mmap替代read很明显减少了一次拷贝，当拷贝数据量很大时，无疑提升了效率。但是使用mmap是有代价的。当你使用mmap时，你可能会遇到一些隐藏的陷阱。例如，当你的程序map了一个文件，但是当这个文件被另一个进程截断(truncate)时, write系统调用会因为访问非法地址而被SIGBUS信号终止。SIGBUS信号默认会杀死你的进程并产生一个coredump,如果你的服务器这样被中止了，那会产生一笔损失。</p>
 <p>当然也有办法解决，本文忽略解决办法。</p>
 <h3 id="sendfile"><a href="#sendfile" class="headerlink" title="sendfile"></a>sendfile</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssize_t sendfile(int out_fd, int in_fd, off_t *offset, size_t count);</span><br></pre></td></tr></table></figure>
-<p><img src="http://blogstatic.aibibang.com/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D-03.jpg" alt=""></p>
+<p><img src="http://static.trumandu.top/%E6%B5%85%E6%9E%90%E9%9B%B6%E6%8B%B7%E8%B4%9D-03.jpg" alt=""></p>
 <p>sendfile实现的零拷贝I/O只使用了2次用户空间与内核空间的上下文切换，以及3次数据的拷贝。其中3次数据拷贝中包括了2次DMA拷贝和1次CPU拷贝。</p>
 <h3 id="splice"><a href="#splice" class="headerlink" title="splice"></a>splice</h3><p>sendfile只适用于将数据从文件拷贝到套接字上，限定了它的使用范围。Linux在2.6.17版本引入splice系统调用，用于在两个文件描述符中移动数据：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define _GNU_SOURCE         /* See feature_test_macros(7) */</span><br><span class="line">#include &lt;fcntl.h&gt;</span><br><span class="line">ssize_t splice(int fd_in, loff_t *off_in, int fd_out, loff_t *off_out, size_t len, unsigned int flags);</span><br></pre></td></tr></table></figure></p>
 <h2 id="java中如何使用零拷贝"><a href="#java中如何使用零拷贝" class="headerlink" title="java中如何使用零拷贝"></a>java中如何使用零拷贝</h2><h2 id="DMA简介"><a href="#DMA简介" class="headerlink" title="DMA简介"></a>DMA简介</h2><p>io读写的方式：中断，DMA</p>

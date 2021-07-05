@@ -104,14 +104,14 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="Kafka 消息生产及消费原理开篇关于客户端生产和消费不在本文中探讨，本文主要集中在Kafka服务器端对消息如何存储和如何读取消息。 本文主要探讨如下问题：  服务器端接收到消息后如何处理？ 如果我指定了一个offset，Kafka怎么查找到对应的消息？ 如果我指定了一个timestamp，Kafka怎么查找到对应的消息？  正文服务器端接收到消息处理流程Kafka Server接受消息处理流程">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/log_append%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta property="og:image" content="http://static.trumandu.top/log_append%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
 <meta property="og:image" content="http://matt33.com/images/kafka/kafka_fetch_request.png">
-<meta property="og:updated_time" content="2019-07-08T10:01:55.197Z">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kafka 消息生产及消费原理">
 <meta name="twitter:description" content="Kafka 消息生产及消费原理开篇关于客户端生产和消费不在本文中探讨，本文主要集中在Kafka服务器端对消息如何存储和如何读取消息。 本文主要探讨如下问题：  服务器端接收到消息后如何处理？ 如果我指定了一个offset，Kafka怎么查找到对应的消息？ 如果我指定了一个timestamp，Kafka怎么查找到对应的消息？  正文服务器端接收到消息处理流程Kafka Server接受消息处理流程">
-<meta name="twitter:image" content="http://blogstatic.aibibang.com/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
+<meta name="twitter:image" content="http://static.trumandu.top/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png">
 
 
 
@@ -409,6 +409,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
+              
+            
           </span>
 
           
@@ -476,9 +492,9 @@
 <li>如果我指定了一个offset，Kafka怎么查找到对应的消息？</li>
 <li>如果我指定了一个timestamp，Kafka怎么查找到对应的消息？</li>
 </ol>
-<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="服务器端接收到消息处理流程"><a href="#服务器端接收到消息处理流程" class="headerlink" title="服务器端接收到消息处理流程"></a>服务器端接收到消息处理流程</h3><h4 id="Kafka-Server接受消息处理流程"><a href="#Kafka-Server接受消息处理流程" class="headerlink" title="Kafka Server接受消息处理流程"></a>Kafka Server接受消息处理流程</h4><p><img src="http://blogstatic.aibibang.com/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt=""></p>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="服务器端接收到消息处理流程"><a href="#服务器端接收到消息处理流程" class="headerlink" title="服务器端接收到消息处理流程"></a>服务器端接收到消息处理流程</h3><h4 id="Kafka-Server接受消息处理流程"><a href="#Kafka-Server接受消息处理流程" class="headerlink" title="Kafka Server接受消息处理流程"></a>Kafka Server接受消息处理流程</h4><p><img src="http://static.trumandu.top/kafka%20server%E6%8E%A5%E5%8F%97%E6%B6%88%E6%81%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt=""></p>
 <p>KafkaApis是Kafka server处理所有请求的入口，在 Kafka 中，每个副本（replica）都会跟日志实例（Log 对象）一一对应，一个副本会对应一个 Log 对象。副本由ReplicaManager管理，对于消息的写入操作在Log与LogSement中进行的。</p>
-<h4 id="Log-append处理流程"><a href="#Log-append处理流程" class="headerlink" title="Log append处理流程"></a>Log append处理流程</h4><p><img src="http://blogstatic.aibibang.com/log_append%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt=""></p>
+<h4 id="Log-append处理流程"><a href="#Log-append处理流程" class="headerlink" title="Log append处理流程"></a>Log append处理流程</h4><p><img src="http://static.trumandu.top/log_append%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.png" alt=""></p>
 <p>真正的日志写入，还是在 LogSegment 的 <code>append()</code> 方法中完成的，LogSegment 会跟 Kafka 最底层的文件通道、mmap 打交道。数据并不是实时持久化的，mmap只是写入了页缓存，并没有flush进磁盘，当满足<code>if (unflushedMessages &gt;= config.flushInterval)</code>才会真正写入磁盘。</p>
 <h2 id="Consumer-获取消息"><a href="#Consumer-获取消息" class="headerlink" title="Consumer 获取消息"></a>Consumer 获取消息</h2><p><img src="http://matt33.com/images/kafka/kafka_fetch_request.png" alt=""></p>
 <h3 id="指定offset，Kafka怎么查找到对应的消息"><a href="#指定offset，Kafka怎么查找到对应的消息" class="headerlink" title="指定offset，Kafka怎么查找到对应的消息"></a>指定offset，Kafka怎么查找到对应的消息</h3><ol>

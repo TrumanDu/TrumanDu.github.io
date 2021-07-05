@@ -104,15 +104,15 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="Kafka 逻辑架构设计开篇本文主要探讨如下问题；  Kafka架构设计 Kafka的日志目录结构  正文Kafka架构设计kafka为分布式消息系统，由多个broker组成。消息是通过topic来分类的，一个topic下存在多个partition,每个partition又由多个segment构成。 发布订阅者模式 kafka集群架构 主题逻辑结构 Kafka的日志目录结构">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blogstatic.aibibang.com/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg">
-<meta property="og:image" content="http://blogstatic.aibibang.com/Topic%E9%80%BB%E8%BE%91%E7%BB%93%E6%9E%84.jpg">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kfaka%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg">
-<meta property="og:updated_time" content="2019-07-08T08:30:16.949Z">
+<meta property="og:image" content="http://static.trumandu.top/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg">
+<meta property="og:image" content="http://static.trumandu.top/kafka%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg">
+<meta property="og:image" content="http://static.trumandu.top/Topic%E9%80%BB%E8%BE%91%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:image" content="http://static.trumandu.top/kfaka%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.382Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka 逻辑架构设计">
 <meta name="twitter:description" content="Kafka 逻辑架构设计开篇本文主要探讨如下问题；  Kafka架构设计 Kafka的日志目录结构  正文Kafka架构设计kafka为分布式消息系统，由多个broker组成。消息是通过topic来分类的，一个topic下存在多个partition,每个partition又由多个segment构成。 发布订阅者模式 kafka集群架构 主题逻辑结构 Kafka的日志目录结构">
-<meta name="twitter:image" content="http://blogstatic.aibibang.com/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg">
+<meta name="twitter:image" content="http://static.trumandu.top/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg">
 
 
 
@@ -410,6 +410,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
+              
+            
           </span>
 
           
@@ -476,10 +492,10 @@
 <li>Kafka的日志目录结构</li>
 </ol>
 <h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h2><h3 id="Kafka架构设计"><a href="#Kafka架构设计" class="headerlink" title="Kafka架构设计"></a>Kafka架构设计</h3><p>kafka为分布式消息系统，由多个broker组成。消息是通过topic来分类的，一个topic下存在多个partition,每个partition又由多个segment构成。</p>
-<h4 id="发布订阅者模式"><a href="#发布订阅者模式" class="headerlink" title="发布订阅者模式"></a>发布订阅者模式</h4><p><img src="http://blogstatic.aibibang.com/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg" alt=""></p>
-<h3 id="kafka集群架构"><a href="#kafka集群架构" class="headerlink" title="kafka集群架构"></a>kafka集群架构</h3><p><img src="http://blogstatic.aibibang.com/kafka%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg" alt=""></p>
-<h3 id="主题逻辑结构"><a href="#主题逻辑结构" class="headerlink" title="主题逻辑结构"></a>主题逻辑结构</h3><p><img src="http://blogstatic.aibibang.com/Topic%E9%80%BB%E8%BE%91%E7%BB%93%E6%9E%84.jpg" alt=""></p>
-<h2 id="Kafka的日志目录结构"><a href="#Kafka的日志目录结构" class="headerlink" title="Kafka的日志目录结构"></a>Kafka的日志目录结构</h2><p><img src="http://blogstatic.aibibang.com/kfaka%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg" alt=""></p>
+<h4 id="发布订阅者模式"><a href="#发布订阅者模式" class="headerlink" title="发布订阅者模式"></a>发布订阅者模式</h4><p><img src="http://static.trumandu.top/%E6%B6%88%E8%B4%B9%E8%AE%A2%E9%98%85%E8%80%85%E6%A8%A1%E5%BC%8F.jpg" alt=""></p>
+<h3 id="kafka集群架构"><a href="#kafka集群架构" class="headerlink" title="kafka集群架构"></a>kafka集群架构</h3><p><img src="http://static.trumandu.top/kafka%E9%9B%86%E7%BE%A4%E6%9E%B6%E6%9E%84.jpg" alt=""></p>
+<h3 id="主题逻辑结构"><a href="#主题逻辑结构" class="headerlink" title="主题逻辑结构"></a>主题逻辑结构</h3><p><img src="http://static.trumandu.top/Topic%E9%80%BB%E8%BE%91%E7%BB%93%E6%9E%84.jpg" alt=""></p>
+<h2 id="Kafka的日志目录结构"><a href="#Kafka的日志目录结构" class="headerlink" title="Kafka的日志目录结构"></a>Kafka的日志目录结构</h2><p><img src="http://static.trumandu.top/kfaka%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84.jpg" alt=""></p>
 
       
     </div>

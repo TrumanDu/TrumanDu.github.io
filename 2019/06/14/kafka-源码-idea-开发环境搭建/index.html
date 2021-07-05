@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="前言为了深入研究kafka运行原理和架构，很有必要搭建开发环境，这样我们就很方便的debug 服务。 前期准备 Gradle 5.0+ jdk8 Scala 2.12 idea scale plugin  配置/运行 首先执行在源码目录下执行gradle 然后build ./gradlew jar 最后生成idea工程./gradlew idea  运行MirrorMaker 运行kafka se">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
-<meta property="og:updated_time" content="2019-06-14T13:57:07.368Z">
+<meta property="og:image" content="http://static.trumandu.top/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.371Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka 源码 idea 开发环境搭建">
 <meta name="twitter:description" content="前言为了深入研究kafka运行原理和架构，很有必要搭建开发环境，这样我们就很方便的debug 服务。 前期准备 Gradle 5.0+ jdk8 Scala 2.12 idea scale plugin  配置/运行 首先执行在源码目录下执行gradle 然后build ./gradlew jar 最后生成idea工程./gradlew idea  运行MirrorMaker 运行kafka se">
-<meta name="twitter:image" content="http://blogstatic.aibibang.com/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
+<meta name="twitter:image" content="http://static.trumandu.top/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png">
 
 
 
@@ -404,12 +404,24 @@
                 
               
 
-              <time title="创建时间：2019-06-14 21:45:03 / 修改时间：21:57:07" itemprop="dateCreated datePublished" datetime="2019-06-14T21:45:03+08:00">2019-06-14</time>
+              <time title="创建时间：2019-06-14 21:45:03" itemprop="dateCreated datePublished" datetime="2019-06-14T21:45:03+08:00">2019-06-14</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
               
             
           </span>
@@ -484,9 +496,9 @@
 <li>然后build <code>./gradlew jar</code></li>
 <li>最后生成idea工程<code>./gradlew idea</code></li>
 </ul>
-<h3 id="运行MirrorMaker"><a href="#运行MirrorMaker" class="headerlink" title="运行MirrorMaker"></a>运行MirrorMaker</h3><p><img src="http://blogstatic.aibibang.com/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png" alt=""></p>
+<h3 id="运行MirrorMaker"><a href="#运行MirrorMaker" class="headerlink" title="运行MirrorMaker"></a>运行MirrorMaker</h3><p><img src="http://static.trumandu.top/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_2.png" alt=""></p>
 <h3 id="运行kafka-server"><a href="#运行kafka-server" class="headerlink" title="运行kafka server"></a>运行kafka server</h3><p>因为kafka依赖zookeeper,在开始之前请先启动一个zookeeper服务，本文章略。</p>
-<p><img src="http://blogstatic.aibibang.com/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png" alt=""></p>
+<p><img src="http://static.trumandu.top/kafka%20%E6%BA%90%E7%A0%81%20idea%20%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA_1.png" alt=""></p>
 <h2 id="错误总结"><a href="#错误总结" class="headerlink" title="错误总结"></a>错误总结</h2><h3 id="无log"><a href="#无log" class="headerlink" title="无log"></a>无log</h3><p>下载<a href="https://mvnrepository.com/artifact/log4j/log4j/1.2.17" target="_blank" rel="noopener">log4j</a>和<br><a href="https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12/1.7.26" target="_blank" rel="noopener">slf4j-log4j12</a></p>
 <p>然后在modules中找到core/main,将这两个依赖导入进来即可</p>
 <p>最后将config目录下的log4j.properties复制到core/main/scala目录下（如果还是无法看到log,可以将该文件复制到out/production/classes目录下）</p>

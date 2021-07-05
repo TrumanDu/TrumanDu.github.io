@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="kafka consumer 源码分析（二）分区分配策略开篇在开始这篇之前，先抛出问题，这章主要通过研究consumer源码解决如下问题： 分区分配策略是什么样的？ 正文分区分配策略这里的分区分配策略仅仅只讨论consumer,关于producer端的分区不在本次探讨范围内。 consumer端分区分配策略官方有三种：RangeAssignor（默认值）,RoundRobinAssignor,St">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-06-27T15:12:01.195Z">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.358Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="kafka consumer 源码分析（二）分区分配策略">
 <meta name="twitter:description" content="kafka consumer 源码分析（二）分区分配策略开篇在开始这篇之前，先抛出问题，这章主要通过研究consumer源码解决如下问题： 分区分配策略是什么样的？ 正文分区分配策略这里的分区分配策略仅仅只讨论consumer,关于producer端的分区不在本次探讨范围内。 consumer端分区分配策略官方有三种：RangeAssignor（默认值）,RoundRobinAssignor,St">
@@ -401,12 +401,24 @@
                 
               
 
-              <time title="创建时间：2019-06-27 23:04:18 / 修改时间：23:12:01" itemprop="dateCreated datePublished" datetime="2019-06-27T23:04:18+08:00">2019-06-27</time>
+              <time title="创建时间：2019-06-27 23:04:18" itemprop="dateCreated datePublished" datetime="2019-06-27T23:04:18+08:00">2019-06-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
               
             
           </span>

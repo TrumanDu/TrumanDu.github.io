@@ -104,15 +104,15 @@
 <meta property="og:description" content="Newegg的事件中心之Event Hub万事皆事件事件是信息的一种承载媒介，描述特定对象某一瞬间的非持续性变化，与唯一时刻和唯一对象关联。例如：某台计算机从运行状态变更为关机，程序运行开始和结束，办公大楼停电等。事件是对象在两个不同状态中的变更瞬间的记录。 对于事件，我们关注时间点，什么事件，什么状态。在企业中存在大量的事件，系统事件，监控事件，业务事件等，通过对事件的治理和挖掘，能够发现很多价">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://mc.qcloudimg.com/static/img/07e6540c12a045232174cdf3646e91ff/image.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/1611048694361.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/image-20210204214604410.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/image-20210204214203000.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/image-20210204214411771.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/1611111265964.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/common_event_process.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/1611120821430.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/data_stream.png">
-<meta property="og:updated_time" content="2021-02-04T13:51:54.227Z">
+<meta property="og:image" content="http://static.trumandu.top/1611048694361.png">
+<meta property="og:image" content="http://static.trumandu.top/image-20210204214604410.png">
+<meta property="og:image" content="http://static.trumandu.top/image-20210204214203000.png">
+<meta property="og:image" content="http://static.trumandu.top/image-20210204214411771.png">
+<meta property="og:image" content="http://static.trumandu.top/1611111265964.png">
+<meta property="og:image" content="http://static.trumandu.top/common_event_process.png">
+<meta property="og:image" content="http://static.trumandu.top/1611120821430.png">
+<meta property="og:image" content="http://static.trumandu.top/data_stream.png">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.209Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Newegg的事件中心之Event Hub">
 <meta name="twitter:description" content="Newegg的事件中心之Event Hub万事皆事件事件是信息的一种承载媒介，描述特定对象某一瞬间的非持续性变化，与唯一时刻和唯一对象关联。例如：某台计算机从运行状态变更为关机，程序运行开始和结束，办公大楼停电等。事件是对象在两个不同状态中的变更瞬间的记录。 对于事件，我们关注时间点，什么事件，什么状态。在企业中存在大量的事件，系统事件，监控事件，业务事件等，通过对事件的治理和挖掘，能够发现很多价">
@@ -414,6 +414,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
+              
+            
           </span>
 
           
@@ -490,22 +506,22 @@
 </ul>
 <p>为了解决以上问题，治理企业级监控问题，我们在Event Hub中基于现存的问题，构建了企业级监控平台。俗话说，先挑软柿子捏。</p>
 <p>作为企业级监控平台，Event Hub 立足于能够助力发现、定位、解决问题，保障系统与服务整体的稳定与性能。引入事件作为监控的信息载体，能更准确与直接描述<strong>资源</strong>与<strong>底层基础设施服务</strong>的运行状态，助力更高效发现、定位从而解决问题。致力于提交信息描述准确性，减少延迟，传递更多的信息，完善监控信息维度，使用通用事件引擎对告警类信息加工处理，尽而告警。</p>
-<p><img src="http://blogstatic.aibibang.com/1611048694361.png" alt="1611048694361"></p>
+<p><img src="http://static.trumandu.top/1611048694361.png" alt="1611048694361"></p>
 <h4 id="不仅仅是一个告警，而是所有的告警"><a href="#不仅仅是一个告警，而是所有的告警" class="headerlink" title="不仅仅是一个告警，而是所有的告警"></a>不仅仅是一个告警，而是所有的告警</h4><p>Event Hub不仅能够接入来自底层基础设施服务例如：Syslog, SNMP, Prometheus, Nagios, Zabbix, Sensu 和 netdata。任何监控工具和系统都可以很容易通过URL方式将告警信息的集成。接入成本几乎为零，降低各个系统接入的难度，统一一个平台，在一个平台上管理很查看不同的告警。</p>
-<p><img src="http://blogstatic.aibibang.com/image-20210204214604410.png" alt="image-20210204214604410"></p>
+<p><img src="http://static.trumandu.top/image-20210204214604410.png" alt="image-20210204214604410"></p>
 <h4 id="灵活的警报格式。记录对你重要的事情"><a href="#灵活的警报格式。记录对你重要的事情" class="headerlink" title="灵活的警报格式。记录对你重要的事情"></a>灵活的警报格式。记录对你重要的事情</h4><p>大多数的监控系统强制你按照它的格式去做，但是Event Hub不同，你可以自由发送任何值的警报。单个警报可以与多个服务关联，具有任何格式的任意数量的“标签”，并且允许任意数量的自定义属性。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;severity&quot;: &quot;major&quot;,</span><br><span class="line">  &quot;eventId&quot;: &quot;714f866ba2ec43775cd6bbda65ff65bd6091bc3a26e9f9f61045014e7746dc09&quot;,</span><br><span class="line">  &quot;resource&quot;: &quot;5XX Error&quot;,</span><br><span class="line">  &quot;origin&quot;: &quot;API Gateway&quot;,</span><br><span class="line">  &quot;eventType&quot;: &quot;alert&quot;,</span><br><span class="line">  &quot;type&quot;: &quot;apigatewayAlert&quot;,</span><br><span class="line">  &quot;environment&quot;: &quot;EC&quot;,</span><br><span class="line">  &quot;createTime&quot;: &quot;2021-01-20T01:44:10.894Z&quot;,</span><br><span class="line">  &quot;service&quot;: [</span><br><span class="line">    &quot;Desktop-Shopping&quot;</span><br><span class="line">  ],</span><br><span class="line">  &quot;postDate&quot;: 1611107052262,</span><br><span class="line">  &quot;attributes&quot;: &#123;</span><br><span class="line">    &quot;apiName&quot;: &quot;Desktop-Shopping&quot;,</span><br><span class="line">    &quot;owner-email&quot;: &quot;........&quot;,</span><br><span class="line">    &quot;categoryName&quot;: &quot;Website API (PCI)&quot;,</span><br><span class="line">    &quot;moreInfo&quot;: &quot;&lt;a href=\&quot;https://xxxxxxxxx/xxxxxxx/apis/xxxxxxxxxxxx/monitor?env=prd&amp;location=e4\&quot;&gt;API Gateway Monitor&lt;/a&gt;&quot;,</span><br><span class="line">    &quot;apiId&quot;: &quot;xxxxxxxxxxxxxxx&quot;,</span><br><span class="line">    &quot;categoryId&quot;: &quot;xxxxxxxxxxxxxxxxxxxxxxxx&quot;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;location&quot;: &quot;E4&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;51 5XX calls in the past 5 minutes. &quot;,</span><br><span class="line">  &quot;event&quot;: &quot;API (Desktop-Shopping) Has 5XX Issue in prd e4&quot;,</span><br><span class="line">  &quot;value&quot;: 51,</span><br><span class="line">  &quot;status&quot;: &quot;open&quot;,</span><br><span class="line">  &quot;timestamp&quot;: 1611107050996</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="http://blogstatic.aibibang.com/image-20210204214203000.png" alt="image-20210204214203000"></p>
+<p><img src="http://static.trumandu.top/image-20210204214203000.png" alt="image-20210204214203000"></p>
 <h4 id="零成本重复数据删除和简单关联"><a href="#零成本重复数据删除和简单关联" class="headerlink" title="零成本重复数据删除和简单关联"></a>零成本重复数据删除和简单关联</h4><p>当同时收到多个来源接收警报时，你很快就会不知所措。对于Event Hub，如果警报和警报具有相同的严重性，则具有相同环境和资源的任何警报将被视为重复警报。</p>
-<p><img src="http://blogstatic.aibibang.com/image-20210204214411771.png" alt="image-20210204214411771"></p>
-<h4 id="更智能的统计报表"><a href="#更智能的统计报表" class="headerlink" title="更智能的统计报表"></a>更智能的统计报表</h4><p><img src="http://blogstatic.aibibang.com/1611111265964.png" alt="1611111265964"></p>
+<p><img src="http://static.trumandu.top/image-20210204214411771.png" alt="image-20210204214411771"></p>
+<h4 id="更智能的统计报表"><a href="#更智能的统计报表" class="headerlink" title="更智能的统计报表"></a>更智能的统计报表</h4><p><img src="http://static.trumandu.top/1611111265964.png" alt="1611111265964"></p>
 <p>当然除了以上说了，还有很多地方，限于时间和篇幅，如果你的系统需要这么一个企业级监控，请联系我。</p>
 <h3 id="统一的信息通知-任务追踪平台"><a href="#统一的信息通知-任务追踪平台" class="headerlink" title="统一的信息通知/任务追踪平台"></a>统一的信息通知/任务追踪平台</h3><p>可以查看待完成任务/通知（事件）</p>
 <p>支持多种信息发送方式：teams,email.webhook等</p>
 <h3 id="实现基于时间序列的事件驱动引擎"><a href="#实现基于时间序列的事件驱动引擎" class="headerlink" title="实现基于时间序列的事件驱动引擎"></a>实现基于时间序列的事件驱动引擎</h3><p>通用的时间序列事件引擎，支持对事件流式数据进行强大的过滤，数据加工，事件流转。</p>
-<p><img src="http://blogstatic.aibibang.com/common_event_process.png" alt="img"></p>
-<h2 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h2><h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><p><img src="http://blogstatic.aibibang.com/1611120821430.png" alt="1611120821430"></p>
-<h3 id="数据流"><a href="#数据流" class="headerlink" title="数据流"></a>数据流</h3><p><img src="http://blogstatic.aibibang.com/data_stream.png" alt="img"></p>
+<p><img src="http://static.trumandu.top/common_event_process.png" alt="img"></p>
+<h2 id="系统设计"><a href="#系统设计" class="headerlink" title="系统设计"></a>系统设计</h2><h3 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h3><p><img src="http://static.trumandu.top/1611120821430.png" alt="1611120821430"></p>
+<h3 id="数据流"><a href="#数据流" class="headerlink" title="数据流"></a>数据流</h3><p><img src="http://static.trumandu.top/data_stream.png" alt="img"></p>
 <h2 id="价值"><a href="#价值" class="headerlink" title="价值"></a>价值</h2><ul>
 <li>完善资源监控信息维度，为监控运维提供更全面数据支撑。</li>
 <li>提供事件信息消费渠道，助力转化监控信息价值。</li>

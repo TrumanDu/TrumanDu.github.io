@@ -105,9 +105,9 @@
 <meta property="og:description" content="前言Spring Boot应用监控有很多方案，例如elastic APM,Prometheus等。各有特色，本次实践采用方案：Micrometer+Prometheus+Grafana。 选择Micrometer最重要的原因是他的设计很灵活，并且和spring boot 2.x集成度很高。对于jvm的监控很容易集成，难度很小。本次实践包含jvm监控和业务性能指标监控。 环境准备 搭建prometh">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://micrometer.io/static/media/logo-no-title.d91d5ac6.svg">
-<meta property="og:image" content="http://blogstatic.aibibang.com/dashboards.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/syncbigdata_monitorpng.png">
-<meta property="og:updated_time" content="2020-04-08T12:11:14.624Z">
+<meta property="og:image" content="http://static.trumandu.top/dashboards.png">
+<meta property="og:image" content="http://static.trumandu.top/syncbigdata_monitorpng.png">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring Boot 应用监控最佳实践之Micrometer">
 <meta name="twitter:description" content="前言Spring Boot应用监控有很多方案，例如elastic APM,Prometheus等。各有特色，本次实践采用方案：Micrometer+Prometheus+Grafana。 选择Micrometer最重要的原因是他的设计很灵活，并且和spring boot 2.x集成度很高。对于jvm的监控很容易集成，难度很小。本次实践包含jvm监控和业务性能指标监控。 环境准备 搭建prometh">
@@ -409,6 +409,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
+              
+            
           </span>
 
           
@@ -495,14 +511,14 @@
 <h3 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h3><p>访问 <code>http://localhost:8080/actuator/prometheus</code> 即可看到响应的metric信息。</p>
 <p>在grafana中中导入<a href="https://grafana.com/grafana/dashboards/4701" target="_blank" rel="noopener">JVM (Micrometer)</a></p>
 <p>即可看到如下效果：</p>
-<p><img src="http://blogstatic.aibibang.com/dashboards.png" alt=""></p>
+<p><img src="http://static.trumandu.top/dashboards.png" alt=""></p>
 <h2 id="自定义业务性能监控"><a href="#自定义业务性能监控" class="headerlink" title="自定义业务性能监控"></a>自定义业务性能监控</h2><p>因为系统遗留监控代码的原因，这里采用的是全局静态方法实现。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">protected static Iterable&lt;Tag&gt; tags(String service, String category, String method) &#123;</span><br><span class="line">    return Tags.of(&quot;service&quot;, service, &quot;category&quot;, category, &quot;method&quot;, method);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">protected static Iterable&lt;Tag&gt; tags(String service, String category) &#123;</span><br><span class="line">    return Tags.of(&quot;service&quot;, service, &quot;category&quot;, category);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void controllerMetric(String service, MonitorMetric.MonitorOperationType type, String method, long time) &#123;</span><br><span class="line">    try &#123;</span><br><span class="line">        Metrics.counter(Constants.HTTP_REQUESTS_TOTAL, tags(service, type.name(), method)).increment();</span><br><span class="line">        Metrics.timer(Constants.REQUESTS_LATENCY, tags(service, type.name())).record(Duration.ofMillis(time));</span><br><span class="line">    &#125; catch (Exception e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>解释一下，这里可以统计出请求数和请求延迟。</p>
 <p>对于每秒请求数据量，可以使用<code>increase(http_requests_total{job=~&quot;$job&quot;,instance=~&quot;$instance&quot;}[1m])</code></p>
 <p>对于平均请求延迟，可以使用<code>rate(timer_sum[1m])/rate(timer_count[1m])</code></p>
 <p>对于Throughput  可以使用<code>rate(timer_count[1m])</code></p>
-<p><img src="http://blogstatic.aibibang.com/syncbigdata_monitorpng.png" alt=""></p>
+<p><img src="http://static.trumandu.top/syncbigdata_monitorpng.png" alt=""></p>
 <h2 id="使用中的困惑"><a href="#使用中的困惑" class="headerlink" title="使用中的困惑"></a>使用中的困惑</h2><h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><strong>Percentile histograms</strong>与<strong>Distribution summaries</strong>性能损失还无法确定，不过查看<code>PrometheusTimer</code>，结合测试，还是有一定的性能损失，不过这里未深入研究。</p>
 <h3 id="全局使用一些开发建议"><a href="#全局使用一些开发建议" class="headerlink" title="全局使用一些开发建议"></a>全局使用一些开发建议</h3><p>可以在定义静态方法类，初始化的时候做一点配置，registry可以使用spring 注入进来例如：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Autowired </span><br><span class="line">MeterRegistry registry;</span><br></pre></td></tr></table></figure>

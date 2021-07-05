@@ -103,17 +103,17 @@
 <meta property="og:site_name" content="Truman&#39;s Blog">
 <meta property="og:description" content="只是记录自己不知道的知识点，或者经常容易忘的内容,想知道更多的信息建议看课程或者找我聊天交换技能。在课程的内容基础之上，补充了一些自己知道的知识点。  Kafka的认知 分布式消息引擎平台 分布式实时流式处理平台  早期Kafka社区对Kafka的定位为⼀个分布式、分区化且带备份功能的提交⽇志（Commit Log）服务,近期在官网彻底更改为分布式实时流式处理平台。 Kafka流式处理框架的优势">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka-core_tech.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka_request.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka_group_state.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/kafka_group_change_status.png">
-<meta property="og:image" content="http://blogstatic.aibibang.com/2020-10-14-kafka_core-hw.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka-core_tech.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka_request.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka_group_state.png">
+<meta property="og:image" content="http://static.trumandu.top/kafka_group_change_status.png">
+<meta property="og:image" content="http://static.trumandu.top/2020-10-14-kafka_core-hw.png">
 <meta property="og:image" content="https://img-blog.csdnimg.cn/20190814184301298.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21hZG9uZ3l1MTI1OTg5MjkzNg==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2020-10-14T12:43:00.139Z">
+<meta property="og:updated_time" content="2021-07-05T10:07:57.438Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Kafka核心技术与实战》学习笔记">
 <meta name="twitter:description" content="只是记录自己不知道的知识点，或者经常容易忘的内容,想知道更多的信息建议看课程或者找我聊天交换技能。在课程的内容基础之上，补充了一些自己知道的知识点。  Kafka的认知 分布式消息引擎平台 分布式实时流式处理平台  早期Kafka社区对Kafka的定位为⼀个分布式、分区化且带备份功能的提交⽇志（Commit Log）服务,近期在官网彻底更改为分布式实时流式处理平台。 Kafka流式处理框架的优势">
-<meta name="twitter:image" content="http://blogstatic.aibibang.com/kafka-core_tech.png">
+<meta name="twitter:image" content="http://static.trumandu.top/kafka-core_tech.png">
 
 
 
@@ -411,6 +411,22 @@
             
 
             
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2021-07-05 18:07:57" itemprop="dateModified" datetime="2021-07-05T18:07:57+08:00">2021-07-05</time>
+              
+            
           </span>
 
           
@@ -454,7 +470,7 @@
 
       
         <p>只是记录自己不知道的知识点，或者经常容易忘的内容,想知道更多的信息建议看课程或者找我聊天交换技能。在课程的内容基础之上，补充了一些自己知道的知识点。</p>
-<p><img src="http://blogstatic.aibibang.com/kafka-core_tech.png" alt=""></p>
+<p><img src="http://static.trumandu.top/kafka-core_tech.png" alt=""></p>
 <h2 id="Kafka的认知"><a href="#Kafka的认知" class="headerlink" title="Kafka的认知"></a>Kafka的认知</h2><ul>
 <li>分布式消息引擎平台</li>
 <li>分布式实时流式处理平台</li>
@@ -503,7 +519,7 @@
 <h2 id="Kafka副本机制"><a href="#Kafka副本机制" class="headerlink" title="Kafka副本机制"></a>Kafka副本机制</h2><h3 id="Kafka判断Follower-是否与Leader同步的标准"><a href="#Kafka判断Follower-是否与Leader同步的标准" class="headerlink" title="Kafka判断Follower 是否与Leader同步的标准"></a>Kafka判断Follower 是否与Leader同步的标准</h3><p>Broker端参数<strong>replica.lag.time.max.ms</strong>参数值，这个参数的含义是Follower副本能够落后Leader副本的最⻓时 间间隔，当前默认值是10秒。</p>
 <h3 id="Unclean领导者选举（Unclean-Leader-Election）"><a href="#Unclean领导者选举（Unclean-Leader-Election）" class="headerlink" title="Unclean领导者选举（Unclean Leader Election）"></a>Unclean领导者选举（Unclean Leader Election）</h3><p>Broker端参数unclean.leader.election.enable控制是否允许Unclean领导者选举，true提高了高可用，降低了数据一致性。推荐设置为false</p>
 <p><a href="http://kafka.apache.org/documentation/#upgrade_1100_notable" target="_blank" rel="noopener">0.11.0</a>以后的版本默认都是false,从<a href="http://kafka.apache.org/documentation/#upgrade_210_notable" target="_blank" rel="noopener">2.1.0版本</a>开始复写动态配置的话，默认为启用</p>
-<h2 id="Kafka请求是怎么被处理"><a href="#Kafka请求是怎么被处理" class="headerlink" title="Kafka请求是怎么被处理"></a>Kafka请求是怎么被处理</h2><p><img src="http://blogstatic.aibibang.com/kafka_request.png" alt=""></p>
+<h2 id="Kafka请求是怎么被处理"><a href="#Kafka请求是怎么被处理" class="headerlink" title="Kafka请求是怎么被处理"></a>Kafka请求是怎么被处理</h2><p><img src="http://static.trumandu.top/kafka_request.png" alt=""></p>
 <p>num.network.threads 决定网络线程池的数量，默认值为3</p>
 <p>num.io.threads 控制IO线程池的数量，默认值为8</p>
 <h2 id="Kafka-JMX指标监控"><a href="#Kafka-JMX指标监控" class="headerlink" title="Kafka JMX指标监控"></a>Kafka JMX指标监控</h2><ul>
@@ -571,8 +587,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="消费者组状态及各个状态流转"><a href="#消费者组状态及各个状态流转" class="headerlink" title="消费者组状态及各个状态流转"></a>消费者组状态及各个状态流转</h2><p><img src="http://blogstatic.aibibang.com/kafka_group_state.png" alt=""></p>
-<p><img src="http://blogstatic.aibibang.com/kafka_group_change_status.png" alt=""></p>
+<h2 id="消费者组状态及各个状态流转"><a href="#消费者组状态及各个状态流转" class="headerlink" title="消费者组状态及各个状态流转"></a>消费者组状态及各个状态流转</h2><p><img src="http://static.trumandu.top/kafka_group_state.png" alt=""></p>
+<p><img src="http://static.trumandu.top/kafka_group_change_status.png" alt=""></p>
 <h2 id="⾼⽔位和LEO的更新机制"><a href="#⾼⽔位和LEO的更新机制" class="headerlink" title="⾼⽔位和LEO的更新机制"></a>⾼⽔位和LEO的更新机制</h2><h3 id="高水位作用"><a href="#高水位作用" class="headerlink" title="高水位作用"></a>高水位作用</h3><ol>
 <li>消息可见性</li>
 <li>帮助kafka完成副本同步</li>
@@ -597,7 +613,7 @@
 <li>更新⾼⽔位值。<br> i. 获取Leader发送的⾼⽔位值：currentHW（leader）。<br> ii. 获取步骤2中更新过的LEO值：currentLEO。<br> iii. 更新⾼⽔位为min(currentHW, currentLEO)。</li>
 </ol>
 <p>文字比较费解，还是看图。原文和我写的有点出入，不过我感觉这样才是正确的！</p>
-<p><img src="http://blogstatic.aibibang.com/2020-10-14-kafka_core-hw.png" alt=""></p>
+<p><img src="http://static.trumandu.top/2020-10-14-kafka_core-hw.png" alt=""></p>
 <h2 id="Leader-Epoch"><a href="#Leader-Epoch" class="headerlink" title="Leader Epoch"></a>Leader Epoch</h2><p>⾼⽔位更新错配导致的各种不⼀致问题，因此引入了Leader Epoch</p>
 <p>所谓Leader Epoch，我们⼤致可以认为是Leader版本。它由两部分数据组成。 </p>
 <ol>
